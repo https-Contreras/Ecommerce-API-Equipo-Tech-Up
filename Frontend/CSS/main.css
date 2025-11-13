@@ -791,3 +791,49 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
     font-size: 0.9rem;
     font-weight: 600;
 }
+
+/* * 11. ESTILOS LOGIN & REGISTRO (¡NUEVO!)
+ *********************************************/
+
+/* Centra el formulario */
+.form-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    background-color: var(--color-surface);
+    padding: 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.form-container h2 {
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+}
+
+/* Para los links de "olvidé contraseña" y "registro" */
+.form-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.form-links a {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.form-links a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* Para mensajes de error */
+.form-message {
+    text-align: center;
+    color: #ff4d4d; /* Rojo para errores */
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
