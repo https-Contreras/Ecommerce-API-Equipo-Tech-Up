@@ -114,8 +114,61 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
     align-items: center;
     gap: 1.25rem;
 }
+.header-tools > a,
+.header-tools > button {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    line-height: 1; /* Para alinear el texto y los íconos */
+}
 
-/* * 5. ESTILOS DE PRODUCTOS (¡El cambio "Chidote"!)
+/* Botón de accesibilidad (ghost) */
+#accessibility-btn {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    font-size: 1.1rem;
+    padding: 0.6rem; /* Más cuadrado */
+}
+
+#accessibility-btn:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Botón del carrito (ghost) */
+.cart-icon {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+.cart-icon:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px rgba(0, 229, 255, 0.3); /* Pequeño glow */
+}
+
+/* Botón de Iniciar Sesión (primario, relleno) */
+.login-btn {
+    background-color: var(--color-primary);
+    color: var(--color-background); /* Texto oscuro (azul noche) para el botón cian */
+    border: 1px solid var(--color-primary);
+}
+
+.login-btn:hover {
+    /* Usamos la variable de hover que ya definimos */
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    box-shadow: var(--shadow-glow); /* Usamos el glow fuerte */
+}
+
+/* * 5. ESTILOS DE PRODUCTOS 
  */
 .product-grid {
     display: grid;
