@@ -1,10 +1,13 @@
+// 📁 Backend/server.js
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-//rutas para usuarios
+
+// 📦 Importar todas las rutas
 const userRoutes = require("./routes/user.routes");
-
-
+const paymentRoutes = require("./routes/payment.routes");
+const contactRoutes = require("./routes/contact.routes");
 
 const app = express();
 const ALLOWED_ORIGINS = [
@@ -14,43 +17,59 @@ const ALLOWED_ORIGINS = [
 
 app.use(cors({ 
     origin: function (origin, callback) {
-    
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      return callback(null, true); // null = sin error, true = permitido
-    }
-    // Si el origen no está permitido, se rechaza la solicitud con un mensaje de error.
-    return callback(new Error('Not allowed by CORS: ' + origin));
-},
-
-  // Especifica los métodos HTTP que este servidor aceptará.
-methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-
-  // Algunos navegadores antiguos esperan un código 200 (en lugar de 204) en respuestas "preflight".
-optionsSuccessStatus: 200
+        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS: ' + origin));
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    optionsSuccessStatus: 200
 }));
-// Permite peticiones de otros orígenes (tu frontend)
-app.use(express.json()); // Permite al servidor entender JSON que viene del cliente 
-app.use(express.urlencoded({ extended: true })); // Permite entender formularios
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
-
+// ========================================
+// 🛣️ RUTAS DE LA API
+// ========================================
 
 // Ruta de prueba
 app.get('/tech-up/test', (req, res) => {
-    // El servidor SIEMPRE responde con JSON 
     res.json({
         message: '¡Bienvenido a la API de Tech-Up!',
         success: true
     });
 });
 
-
+// 👤 Rutas de usuarios (login, register) - CON CAPTCHA
 app.use("/tech-up/users", userRoutes);
 
-// Ruta para servir imágenes estáticas no necesitan validacion de permisos
+// 💳 Rutas de pagos - CON CAPTCHA
+app.use("/tech-up", paymentRoutes);
+
+// 📧 Rutas de contacto - CON CAPTCHA
+app.use("/tech-up", contactRoutes);
+
+// 🖼️ Servir imágenes estáticas (sin protección CAPTCHA)
 app.use('/images', express.static('public/images'));
 
+// ========================================
+// 🚀 INICIAR SERVIDOR
+// ========================================
+
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`
+╔════════════════════════════════════════╗
+║   🚀 Servidor Tech-Up corriendo       ║
+║   📍 http://localhost:${PORT}           ║
+║   🔐 Protección CAPTCHA: ACTIVADA     ║
+╚════════════════════════════════════════╝
+    `);
+    console.log('📋 Rutas protegidas con CAPTCHA:');
+    console.log('   ✅ POST /tech-up/users/login');
+    console.log('   ✅ POST /tech-up/users/register');
+    console.log('   ✅ POST /tech-up/procesar-pago');
+    console.log('   ✅ POST /tech-up/contact');
 });

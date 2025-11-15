@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const registerForm = document.getElementById('register-form');
-    if (!registerForm) return; // No hacer nada si no estamos en esta página
+    if (!registerForm) return;
 
     registerForm.addEventListener('submit', async (event) => {
-        // 1. Evita que la página se recargue
         event.preventDefault();
 
         const nombre = document.getElementById('nombre').value;
@@ -15,48 +13,69 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageElement = document.getElementById('register-message');
         const submitBtn = registerForm.querySelector('.submit-btn');
 
-        // --- INICIO DE VALIDACIÓN EN CLIENTE  ---
-        
-        // 2. Limpia errores previos
         messageElement.textContent = '';
 
-        // 3. Revisa que las contraseñas coincidan
+        // Validaciones
         if (password !== passwordConfirm) {
-            messageElement.textContent = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
-            messageElement.style.color = '#ff4d4d'; // Rojo para error
-            return; // Detiene la ejecución
+            messageElement.textContent = 'Las contraseñas no coinciden.';
+            messageElement.style.color = '#ff4d4d';
+            return;
         }
 
         if (password.length < 8) {
-             messageElement.textContent = 'Tu contraseña debe tener al menos 8 caracteres.';
-             messageElement.style.color = '#ff4d4d';
-             return;
+            messageElement.textContent = 'Tu contraseña debe tener al menos 8 caracteres.';
+            messageElement.style.color = '#ff4d4d';
+            return;
         }
-        // --- FIN DE VALIDACIÓN EN CLIENTE ---
+
+        // ✅ VALIDAR CAPTCHA
+        const captchaResponse = grecaptcha.getResponse();
+        
+        if (!captchaResponse) {
+            messageElement.textContent = 'Por favor, completa el CAPTCHA.';
+            messageElement.style.color = '#ff4d4d';
+            return;
+        }
 
         submitBtn.textContent = 'Creando...';
         submitBtn.disabled = true;
 
-        // 4. Prepara los datos para el backend
-        const formData = {
-            nombre: nombre,
-            email: email,
-            password: password
-        };
-        
-        // (Por ahora solo lo mostramos en consola)
-        console.log("Datos listos para enviar al backend:", formData);
+        try {
+            // Enviar al backend CON el token del captcha
+            const response = await fetch('http://localhost:3000/tech-up/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre: nombre,
+                    email: email,
+                    password: password,
+                    captchaToken: captchaResponse // ← Incluir el token
+                })
+            });
 
-        // --- SIMULACIÓN DE ÉXITO ---
-        // (Aquí irá tu 'fetch' al API de /api/auth/register)
-        setTimeout(() => {
-            messageElement.textContent = '¡Cuenta creada con éxito! Ahora puedes iniciar sesión.';
-            messageElement.style.color = 'var(--color-primary)'; // Verde/Neón para éxito
-            
-            submitBtn.textContent = 'Crear Cuenta';
-            submitBtn.disabled = false;
-            registerForm.reset(); // Limpia el formulario
-        }, 1500);
+            const data = await response.json();
 
+            if (response.ok) {
+                messageElement.textContent = '¡Cuenta creada con éxito!';
+                messageElement.style.color = 'var(--color-primary)';
+                registerForm.reset();
+                grecaptcha.reset(); // Resetear el captcha
+            } else {
+                messageElement.textContent = data.message || 'Error al crear la cuenta';
+                messageElement.style.color = '#ff4d4d';
+                grecaptcha.reset();
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            messageElement.textContent = 'No se pudo conectar al servidor.';
+            messageElement.style.color = '#ff4d4d';
+            grecaptcha.reset();
+        }
+
+        submitBtn.textContent = 'Crear Cuenta';
+        submitBtn.disabled = false;
     });
 });
