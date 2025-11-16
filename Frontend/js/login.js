@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const messageElement = document.getElementById('login-message');
+        
+        // Ya no necesitamos 'messageElement'
         const submitBtn = loginForm.querySelector('.submit-btn');
 
-        messageElement.textContent = ''; 
         submitBtn.textContent = 'Verificando...';
         submitBtn.disabled = true;
 
@@ -32,34 +32,59 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Esperamos la respuesta JSON del backend
             const data = await response.json();
 
-            // 4. Imprime la respuesta COMPLETA del servidor en la consola
-            console.log("Respuesta del servidor:", data);
-
-            // 5. Reaccionamos según la respuesta
+            // 4. Reaccionamos según la respuesta
             if (response.ok) {
                 
-                // ¡ÉXITO! Solo muestra una alerta
-                alert('¡Login exitoso! (Respuesta de prueba del backend)');
+                // --- ¡ÉXITO CON ALERTA "CHIDOTA"! ---
+                Swal.fire({
+                    title: '¡Bienvenido!',
+                    text: data.message,
+                    icon: 'success',
+                    timer: 2000, // Se cierra solo en 2 segundos
+                    showConfirmButton: false, // Oculta el botón de "OK"
+                    // Estilos para tu tema "tech"
+                    background: '#1a202c', // Tu color --color-surface
+                    color: '#e2e8f0'       // Tu color --color-text
+                });
                 
-                // Muestra el mensaje de éxito
-                messageElement.textContent = '¡Login exitoso!';
-                messageElement.style.color = 'var(--color-primary)';
-                
-                // (Ya no intentamos guardar en localStorage ni redirigir)
-                submitBtn.textContent = 'Entrar';
-                submitBtn.disabled = false;
+                // Guardamos en localStorage
+                localStorage.setItem('userName', data.user.nombre);
+                localStorage.setItem('userToken', data.token);
+
+                // Redirigimos después de que la alerta se cierre
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000); // 2 segundos
                 
             } else {
-                // ¡ERROR! (Ej. contraseña incorrecta)
-                messageElement.textContent = data.message || 'Error en tus credenciales';
+                
+                // --- ¡ERROR CON ALERTA "CHIDOTA"! ---
+                Swal.fire({
+                    title: 'Error de Acceso',
+                    text: data.message || 'Error en tus credenciales',
+                    icon: 'error',
+                    confirmButtonText: 'Intentar de nuevo',
+                    background: '#1a202c',
+                    color: '#e2e8f0'
+                });
+                
                 submitBtn.textContent = 'Entrar';
                 submitBtn.disabled = false;
             }
 
         } catch (error) {
-            // ¡ERROR DE RED!
+            
+            // --- ¡ERROR DE RED CON ALERTA "CHIDOTA"! ---
+            Swal.fire({
+                title: 'Error de Conexión',
+                text: 'No se pudo conectar al servidor. Intenta más tarde.',
+                icon: 'error',
+                confirmButtonText: 'Entendido',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
+
             console.error('Error de fetch:', error);
-            messageElement.textContent = 'No se pudo conectar al servidor. Intenta más tarde.';
             submitBtn.textContent = 'Entrar';
             submitBtn.disabled = false;
         }
