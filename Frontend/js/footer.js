@@ -26,7 +26,7 @@ function initSubscribeForm() {
 
       try {
         const response = await fetch(
-          "http://localhost:3000/tech-up/users/subscribe",
+          "http://localhost:3000/tech-up/subscriptions",
           {
             method: "POST",
             headers: {

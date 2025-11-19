@@ -4,6 +4,8 @@ require("dotenv").config();
 
 // Importar rutas
 const userRoutes = require("./routes/user.routes");
+const subscriptionRoutes = require("./routes/subscription.routes");
+const promotionRoutes = require("./routes/promotion.routes");
 const productRoutes = require("./routes/product.routes");
 const categoryRoutes = require("./routes/category.routes");
 
@@ -35,23 +37,31 @@ app.get("/tech-up/test", (req, res) => {
     success: true,
     endpoints: {
       users: "/tech-up/users",
+      subscriptions: "/tech-up/subscriptions",
+      promotions: "/tech-up/promotions",
       products: "/tech-up/api/products",
       categories: "/tech-up/api/categories",
     },
   });
 });
 
-// Registrar rutas
+// Registrar rutas con nombres semánticos
 app.use("/tech-up/users", userRoutes);
+app.use("/tech-up/subscriptions", subscriptionRoutes);
+app.use("/tech-up/promotions", promotionRoutes);
 app.use("/tech-up/api/products", productRoutes);
 app.use("/tech-up/api/categories", categoryRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`\n📍 Endpoints disponibles:`);
+  console.log(`   👤 Usuarios: http://localhost:${PORT}/tech-up/users`);
   console.log(
-    `📦 API Productos: http://localhost:${PORT}/tech-up/api/products`
+    `   📧 Suscripciones: http://localhost:${PORT}/tech-up/subscriptions`
   );
+  console.log(`   📢 Promociones: http://localhost:${PORT}/tech-up/promotions`);
+  console.log(`   📦 Productos: http://localhost:${PORT}/tech-up/api/products`);
   console.log(
-    `📂 API Categorías: http://localhost:${PORT}/tech-up/api/categories`
+    `   📂 Categorías: http://localhost:${PORT}/tech-up/api/categories`
   );
 });
