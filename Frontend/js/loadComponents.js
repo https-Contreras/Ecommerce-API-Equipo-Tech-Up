@@ -62,6 +62,8 @@ function addLogoutEvent() {
             // 1. Borra al usuario de la memoria
             localStorage.removeItem('userName');
             localStorage.removeItem('userToken');
+            localStorage.removeItem('techUpCarrito');
+            localStorage.removeItem('_grecaptcha');
 
             // 2. Muestra la alerta 
             Swal.fire({

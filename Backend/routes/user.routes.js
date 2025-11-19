@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const userController=require("../controllers/userController");
+const userController = require("../controllers/userController");
+const { verifyCaptcha } = require('../middleware/captcha.middleware'); // ← Ruta correcta
 
 
-router.post("/login",userController.login);
-router.post("/register", userController.register );
+router.post("/login", verifyCaptcha, userController.login);
+router.post('/register', verifyCaptcha, userController.register);
 router.post("/forgot-password", userController.forgotPassword);
-//router.post("/reset-password", userController.resetPassword);
-module.exports=router;
+router.post("/reset-password", userController.resetPassword);
+
+//Ruta de formulario de contacto
+router.post('/contact', verifyCaptcha,userController.contact);
+
+
+module.exports = router;

@@ -5,9 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Tech-Up | Tu Tienda de Computadoras</title>
+    <script>
+        (function() {
+            const user = localStorage.getItem('userName');
+            const userKey = user ? user.replace(/\s+/g, '_') : 'guest';
+            
+
+            const savedTheme = localStorage.getItem(`theme_${userKey}`);
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="CSS/main.css">
-    <script src="/Frontend/js/loadComponents.js"></script>
+    <link rel="stylesheet" href="/Frontend/CSS/main.css">
+    <script src="/Frontend/js/loadComponents.js" defer></script>
+    <script src="js/accesibilidad.js" ></script>
 </head>
 <body>
 
@@ -52,7 +65,7 @@
                 
                 <article class="product-card">
                     <div class="product-image-container">
-                        <img src="assets/images/laptop-gamer.jpg" alt="Laptop Gamer X1">
+                        <img src="http://localhost:3000/images/laptop-gamer.png" alt="Laptop Gamer X1">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Laptop Gamer Avanzada</h3>
@@ -64,7 +77,7 @@
 
                 <article class="product-card">
                     <div class="product-image-container">
-                        <img src="assets/images/monitor-ultrawide.jpg" alt="Monitor Curvo">
+                        <img src="http://localhost:3000/images/monitor-ultrawide.png" alt="Monitor Curvo">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Monitor Curvo Ultrawide 49"</h3>
@@ -76,7 +89,7 @@
 
                 <article class="product-card">
                     <div class="product-image-container">
-                        <img src="assets/images/teclado-mecanico.jpg" alt="Teclado Mecánico">
+                        <img src="http://localhost:3000/images/teclado-mecanico.png" alt="Teclado Mecánico">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Teclado Mecánico RGB</h3>

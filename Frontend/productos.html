@@ -4,10 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prodcutos - Tech-Up</title>
+    <script>
+        (function() {
+            const user = localStorage.getItem('userName');
+            const userKey = user ? user.replace(/\s+/g, '_') : 'guest';
+            
+
+            const savedTheme = localStorage.getItem(`theme_${userKey}`);
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/Frontend/CSS/main.css">
     <script src="/Frontend/js/loadComponents.js"></script>
     <script src="/Frontend/js/main.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/accesibilidad.js" ></script>
 </head>
 
 <header class="site-header" id="main-header"></header>

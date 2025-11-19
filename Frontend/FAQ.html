@@ -4,10 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preguntas Frecuentes - Tech-Up</title>
-    
+    <script>
+        (function() {
+            const user = localStorage.getItem('userName');
+            const userKey = user ? user.replace(/\s+/g, '_') : 'guest';
+            
+
+            const savedTheme = localStorage.getItem(`theme_${userKey}`);
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/Frontend/CSS/main.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/Frontend/js/loadComponents.js" defer></script>
+    <script src="js/accesibilidad.js" ></script>
     <script src="/Frontend/js/FAQ.js" defer></script> </head>
 <body>
 

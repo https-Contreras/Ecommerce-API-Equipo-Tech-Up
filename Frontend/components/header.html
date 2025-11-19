@@ -12,12 +12,36 @@
         <a href="/Frontend/nosotros.html">Sobre Nosotros</a>
     </nav>
 
-    <div class="header-tools">
-        <button id="accessibility-btn" aria-label="Opciones de accesibilidad">♿</button>
+   <div class="header-tools">
+        
+        <div class="accessibility-wrapper" style="position: relative;">
+            <button id="accessibility-btn" aria-label="Opciones de accesibilidad">♿</button>
+            <div id="accessibility-menu" class="accessibility-menu hidden">
+                <h4>Accesibilidad</h4>
+                
+                <div class="access-option">
+                    <span>Tema:</span>
+                    <button id="btn-toggle-theme" class="access-btn">🌙 / ☀️</button>
+                </div>
+
+                <div class="access-option">
+                    <span>Texto:</span>
+                    <div class="text-controls">
+                        <button id="btn-font-decrease" class="access-btn">A-</button>
+                        <button id="btn-font-increase" class="access-btn">A+</button>
+                    </div>
+                </div>
+
+                <button id="btn-access-reset" class="access-reset-btn">Restaurar</button>
+            </div>
+        </div>
+
         <a href="carrito.html" class="cart-icon" aria-label="Ver carrito de compras">
             🛒 <span id="cart-count">0</span>
         </a>
+
         <a href="registro.html" class="register-btn">Registrarse</a>
         <a href="login.html" class="login-btn">Iniciar Sesión</a>
+        
     </div>
 </div>

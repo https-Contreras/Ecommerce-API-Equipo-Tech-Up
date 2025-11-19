@@ -3,8 +3,8 @@ const cors = require('cors');
 require('dotenv').config();
 //rutas para usuarios
 const userRoutes = require("./routes/user.routes");
-
-
+const paymentRoutes = require("./routes/payment.routes");
+const contactRoutes = require("./routes/contact.routes");
 
 const app = express();
 const ALLOWED_ORIGINS = [
@@ -45,10 +45,17 @@ app.get('/tech-up/test', (req, res) => {
     });
 });
 
-
+// 👤 Rutas de usuarios (login, register) - CON CAPTCHA
 app.use("/tech-up/users", userRoutes);
 
+// 💳 Rutas de pagos - CON CAPTCHA
+app.use("/tech-up", paymentRoutes);
 
+// 📧 Rutas de contacto - CON CAPTCHA
+app.use("/tech-up", contactRoutes);
+
+// 🖼️ Servir imágenes estáticas (sin protección CAPTCHA)
+app.use('/images', express.static('public/images'));
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

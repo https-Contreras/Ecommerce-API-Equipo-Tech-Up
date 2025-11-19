@@ -53,11 +53,34 @@ async function savePasswordResetToken(userId, token, expires) {
         // Es importante lanzar el error para que el controlador lo atrape
         throw error; 
     }
+};
+
+//funcion que busca el usuario por el token que se manda para actualizar contraseña
+
+async function findUserByResetToken(token) {
+    // NOW() es la hora actual de la BD.
+    // Buscamos donde el token coincida Y la fecha de expiración sea MAYOR a ahora.
+    const [rows] = await pool.execute(
+        'SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > NOW()',
+        [token]
+    );
+    return rows;
 }
+
+//funcion que actualiza la nueva contraseña del usuario
+async function updateUserPasswordAndClearToken(userId, newPasswordHash) {
+    await pool.execute(
+        'UPDATE users SET contrasena = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?',
+        [newPasswordHash, userId]
+    );
+}
+
 module.exports = {
     findUserByEmail, 
     createUser, 
     updateUserFailedAttempts,
     resetUserLoginAttempts,
-    savePasswordResetToken
+    savePasswordResetToken,
+    findUserByResetToken,
+    updateUserPasswordAndClearToken
 }

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const dbModel = require("../model/dbModel")
 const mailer = require("../config/mailer");
 
+
 exports.register = async (req, res) => {
     try {
         // 1. Obtenemos los datos del frontend
@@ -158,5 +159,67 @@ exports.forgotPassword = async (req, res) => {
     } catch (error) {
         console.error("Error en forgotPassword:", error);
         res.status(500).json({ message: "Error en el servidor" });
+    }
+};
+
+//reset-password:
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        if (!token || !newPassword) {
+            return res.status(400).json({ message: "Datos incompletos." });
+        }
+
+        // 1. Buscar usuario por token válido
+        const userRows = await dbModel.findUserByResetToken(token);
+        const usuario = userRows[0];
+
+        if (!usuario) {
+            // Si no encuentra nada, el token es inválido o ya expiró
+            return res.status(400).json({ message: "El enlace es inválido o ha expirado." });
+        }
+
+        // 2. Encriptar la nueva contraseña
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(newPassword, salt);
+
+        // 3. Guardar cambios y borrar token
+        await dbModel.updateUserPasswordAndClearToken(usuario.id, passwordHash);
+
+        res.status(200).json({ message: "Contraseña actualizada con éxito." });
+
+    } catch (error) {
+        console.error("Error en resetPassword:", error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
+};
+
+//para formulario de contacto
+exports.contact = async(req,res)=>{
+    try {
+        const { nombre, email, asunto, mensaje } = req.body;
+        
+        // ✅ Si llegaste aquí, el CAPTCHA es válido
+        
+        console.log('✅ Mensaje de contacto recibido con CAPTCHA válido:', { 
+            nombre, 
+            email, 
+            asunto,
+            mensaje
+        });
+        
+        // Por ahora simulamos el envío exitoso
+        res.json({
+            success: true,
+            message: 'Mensaje enviado exitosamente'
+        });
+        
+    } catch (error) {
+        console.error('❌ Error enviando mensaje:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al enviar el mensaje'
+        });
     }
 };
