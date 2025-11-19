@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Tech-Up | Panel de Administración</title>
+    
+    <link rel="stylesheet" href="CSS/main.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="/Frontend/js/loadComponents.js"></script>
+</head>
+<body>
+
+    <header class="site-header" id="main-header"></header>
+
+    <section id="admin-panel" style="display: none;">
+        <div class="container">
+            <div style="margin-top: 2rem;">
+                <h1 style="color: var(--color-primary);">Panel de Administración</h1>
+                <p style="color: var(--color-text-muted);">Bienvenido, Administrador. Gestiona tu tienda Tech-Up.</p>
+            </div>
+
+            <nav class="admin-nav" style="margin-top: 1.5rem; border-bottom: 1px solid var(--color-border);">
+                <a href="#admin-inicio" class="admin-tab active" data-tab="admin-inicio">Inicio (Vista Usuario)</a>
+                <a href="#graficas" class="admin-tab" data-tab="graficas">Gráficas de Datos</a>
+                <a href="#altas-bajas" class="admin-tab" data-tab="altas-bajas">Altas y Bajas</a>
+            </nav>
+            
+            <div class="admin-content-wrapper">
+                
+                <section id="admin-inicio" class="tab-content">
+                    
+                    <section class="hero-section" style="padding: 3rem 1.5rem; border: none;">
+                        <div class="container" style="max-width: 100%;">
+                            <h2 class="hero-title">El Futuro del Cómputo. <span class="text-primary">Ahora.</span></h2>
+                            <p class="hero-subtitle">Descubre el hardware de alto rendimiento que llevará tus proyectos y juegos al siguiente nivel.</p>
+                            <a href="productos.html" class="hero-btn">Ver Todos los Productos</a>
+                        </div>
+                    </section>
+
+                    <section class="container">
+                        <h3 class="section-title">Explora Nuestras Categorías</h3>
+                        <div class="category-container">
+                            
+                            <a href="productos.html?categoria=laptops" class="category-card">
+                                <h4>Laptops</h4>
+                                <p>Potencia y portabilidad para crear o jugar donde sea.</p>
+                            </a>
+                            
+                            <a href="productos.html?categoria=desktops" class="category-card">
+                                <h4>Desktops</h4>
+                                <p>Estaciones de trabajo y gaming de máximo rendimiento.</p>
+                            </a>
+                            
+                            <a href="productos.html?categoria=accesorios" class="category-card">
+                                <h4>Accesorios</h4>
+                                <p>Periféricos que completan tu setup perfecto.</p>
+                            </a>
+
+                        </div>
+                    </section>
+
+                    <section class="container">
+                        <h3 class="section-title">Productos Destacados</h3>
+                        
+                        <div class="product-grid">
+                            
+                            <article class="product-card">
+                                <div class="product-image-container">
+                                    <img src="assets/images/laptop-gamer.jpg" alt="Laptop Gamer X1">
+                                </div>
+                                <div class="product-info">
+                                    <h3 class="product-title">Laptop Gamer Avanzada</h3>
+                                    <p class="product-description">Core i9, 32GB RAM, SSD 2TB, RTX 4080</p>
+                                    <p class="product-price">$48,500.00</p>
+                                    <a href="productos.html" class="add-to-cart-btn">Ver más</a>
+                                </div>
+                            </article>
+
+                            <article class="product-card">
+                                <div class="product-image-container">
+                                    <img src="assets/images/monitor-ultrawide.jpg" alt="Monitor Curvo">
+                                </div>
+                                <div class="product-info">
+                                    <h3 class="product-title">Monitor Curvo Ultrawide 49"</h3>
+                                    <p class="product-description">Panel OLED, 240Hz, 1ms respuesta</p>
+                                    <p class="product-price">$21,200.00</p>
+                                    <a href="productos.html" class="add-to-cart-btn">Ver más</a>
+                                </div>
+                            </article>
+
+                            <article class="product-card">
+                                <div class="product-image-container">
+                                    <img src="assets/images/teclado-mecanico.jpg" alt="Teclado Mecánico">
+                                </div>
+                                <div class="product-info">
+                                    <h3 class="product-title">Teclado Mecánico RGB</h3>
+                                    <p class="product-description">Switches ópticos, layout completo</p>
+                                    <p class="product-price">$3,100.00</p>
+                                    <a href="productos.html" class="add-to-cart-btn">Ver más</a>
+                                </div>
+                            </article>
+
+                        </div>
+                    </section>
+                    
+                </section>
+
+                <section id="graficas" class="tab-content" style="display: none;">
+                    <h3 class="section-title">Análisis y Estadísticas</h3>
+                    <div class="charts-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; padding: 2rem 0;">
+                        <div class="chart-card product-card">
+                            <div class="product-info">
+                                <h4 class="product-title">Ventas Mensuales</h4>
+                                <div class="chart-placeholder" style="height: 250px; background-color: var(--color-background); border: 1px dashed var(--color-primary); display: flex; align-items: center; justify-content: center;">
+                                    <p style="color: var(--color-text-muted);">Aquí se insertará la gráfica de Ventas</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-card product-card">
+                            <div class="product-info">
+                                <h4 class="product-title">Inventario por Categoría</h4>
+                                <div class="chart-placeholder" style="height: 250px; background-color: var(--color-background); border: 1px dashed var(--color-primary); display: flex; align-items: center; justify-content: center;">
+                                    <p style="color: var(--color-text-muted);">Aquí se insertará la gráfica de Inventario</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="altas-bajas" class="tab-content" style="display: none;">
+                    <h3 class="section-title">Gestión de Productos</h3>
+
+                    <div style="text-align: right; margin-bottom: 1.5rem;">
+                        <button id="open-add-modal-btn" class="submit-btn" style="width: auto; padding: 0.85rem 1.5rem;">
+                            <i class="fas fa-plus-circle"></i> Dar de Alta Producto
+                        </button>
+                    </div>
+
+                    <div id="product-form-modal" class="management-section product-card" style="display:none; margin-bottom: 2.5rem; padding: 2rem;">
+                        <h4 id="form-title" style="color: var(--color-primary); margin-bottom: 1.5rem;">Dar de Alta Nuevo Producto</h4>
+                        
+                        <form id="product-form" class="contact-form">
+                            <input type="hidden" id="form-mode" value="add"> <div class="form-group">
+                                <input type="text" id="userId" placeholder=" " required>
+                                <label for="userId">ID del Usuario (Demo)</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" id="productId" placeholder=" " required>
+                                <label for="productId">ID del Producto (Ej: prod-1)</label>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" id="nombre" placeholder=" " required>
+                                <label for="nombre">Nombre del Producto</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="number" id="precio" placeholder=" " required min="0" step="0.01">
+                                <label for="precio">Precio ($)</label>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="number" id="cantidad" placeholder=" " required min="0">
+                                <label for="cantidad">Stock</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="url" id="imagen" placeholder=" " required>
+                                <label for="imagen">URL de la Imagen (Ej: http://localhost:3000/images/...)</label>
+                            </div>
+                            
+                            <button type="submit" id="submit-form-btn" class="submit-btn" style="margin-top: 1.5rem;">
+                                <i class="fas fa-save"></i> Guardar Producto
+                            </button>
+                            <button type="button" id="cancel-form-btn" class="cta-btn" style="width: 100%; margin-top: 1rem; background-color: transparent; color: var(--color-text-muted); border-color: var(--color-text-muted);">
+                                Cancelar
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="management-section product-card" style="padding: 2rem;">
+                        <h4 style="color: var(--color-text); margin-bottom: 1.5rem;">Productos en Inventario (Modificar / Eliminar)</h4>
+                        
+                        <div style="overflow-x: auto;">
+                            <table id="products-table" style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                                <thead>
+                                    <tr style="background-color: var(--color-background);">
+                                        <th style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: left;">ID</th>
+                                        <th style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: left;">Producto</th>
+                                        <th style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: right;">Precio</th>
+                                        <th style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: center;">Stock</th>
+                                        <th style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: center;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-id="001" data-userid="user_demo" data-nombre="Laptop Gamer Avanzada" data-precio="48500.00" data-cantidad="15" data-imagen="assets/images/laptop-gamer.jpg">
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); color: var(--color-primary); font-weight: 600;">001</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border);">Laptop Gamer Avanzada</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: right;">$48,500.00</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: center;">15</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: center;">
+                                            <button class="action-btn edit-btn" data-product-id="001" title="Modificar" style="margin-right: 0.5rem;">Editar</button>
+                                            <button class="action-btn delete-btn" data-product-id="001" title="Eliminar">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr data-id="002" data-userid="user_demo" data-nombre="Monitor Curvo Ultrawide 49''" data-precio="21200.00" data-cantidad="8" data-imagen="assets/images/monitor-ultrawide.jpg">
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); color: var(--color-primary); font-weight: 600;">002</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border);">Monitor Curvo Ultrawide 49"</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: right;">$21,200.00</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: center;">8</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid var(--color-border); text-align: center;">
+                                            <button class="action-btn edit-btn" data-product-id="002" title="Modificar" style="margin-right: 0.5rem;">Editar</button>
+                                            <button class="action-btn delete-btn" data-product-id="002" title="Eliminar">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+    
+    <main id="user-content">
+        <section class="hero-section">
+            <div class="container">
+                <h2 class="hero-title">El Futuro del Cómputo. <span class="text-primary">Ahora.</span></h2>
+                <p class="hero-subtitle">Descubre el hardware de alto rendimiento que llevará tus proyectos y juegos al siguiente nivel.</p>
+                <a href="productos.html" class="hero-btn">Ver Todos los Productos</a>
+            </div>
+        </section>
+        <section class="container">
+            <h3 class="section-title">Explora Nuestras Categorías</h3>
+            <div class="category-container">
+                <a href="productos.html?categoria=laptops" class="category-card">
+                    <h4>Laptops</h4>
+                    <p>Potencia y portabilidad para crear o jugar donde sea.</p>
+                </a>
+                <a href="productos.html?categoria=desktops" class="category-card">
+                    <h4>Desktops</h4>
+                    <p>Estaciones de trabajo y gaming de máximo rendimiento.</p>
+                </a>
+                <a href="productos.html?categoria=accesorios" class="category-card">
+                    <h4>Accesorios</h4>
+                    <p>Periféricos que completan tu setup perfecto.</p>
+                </a>
+            </div>
+        </section>
+        <section class="container">
+            <h3 class="section-title">Productos Destacados</h3>
+            <div class="product-grid">
+                <article class="product-card">
+                    <div class="product-image-container">
+                        <img src="assets/images/laptop-gamer.jpg" alt="Laptop Gamer X1">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Laptop Gamer Avanzada</h3>
+                        <p class="product-description">Core i9, 32GB RAM, SSD 2TB, RTX 4080</p>
+                        <p class="product-price">$48,500.00</p>
+                        <a href="productos.html" class="add-to-cart-btn">Ver más</a>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image-container">
+                        <img src="assets/images/monitor-ultrawide.jpg" alt="Monitor Curvo">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Monitor Curvo Ultrawide 49"</h3>
+                        <p class="product-description">Panel OLED, 240Hz, 1ms respuesta</p>
+                        <p class="product-price">$21,200.00</p>
+                        <a href="productos.html" class="add-to-cart-btn">Ver más</a>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image-container">
+                        <img src="assets/images/teclado-mecanico.jpg" alt="Teclado Mecánico">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Teclado Mecánico RGB</h3>
+                        <p class="product-description">Switches ópticos, layout completo</p>
+                        <p class="product-price">$3,100.00</p>
+                        <a href="productos.html" class="add-to-cart-btn">Ver más</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <section class="container">
+            <div class="cta-banner">
+                <h3><span class="text-primary">Ofertas</span> Exclusivas</h3>
+                <p>¡No te pierdas nuestros descuentos de temporada en componentes seleccionados!</p>
+                <a href="productos.html?oferta=true" class="cta-btn">Ver Ofertas Ahora</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" id="main-footer"></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // *** CONFIGURACIÓN DE ACCESO DE ADMINISTRADOR (SIMULADO) ***
+            const isAdmin = true; // Cambia a 'false' para ver la vista de usuario
+            
+            const userContent = document.getElementById('user-content');
+            const adminPanel = document.getElementById('admin-panel');
+            
+            if (isAdmin) {
+                userContent.style.display = 'none';
+                adminPanel.style.display = 'block';
+                setupAdminTabs();
+                setupAdminCRUD(); // Inicializa la lógica CRUD
+            } else {
+                userContent.style.display = 'block'; 
+                adminPanel.style.display = 'none'; 
+            }
+
+            // --- Lógica de Pestañas (Tabs) ---
+            function setupAdminTabs() {
+                const tabs = document.querySelectorAll('.admin-tab');
+                const contents = document.querySelectorAll('.tab-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = e.target.getAttribute('data-tab');
+
+                        tabs.forEach(t => t.classList.remove('active'));
+                        contents.forEach(c => c.style.display = 'none');
+
+                        e.target.classList.add('active');
+
+                        const targetContent = document.getElementById(targetId);
+                        if (targetContent) {
+                            targetContent.style.display = 'block';
+                        }
+                    });
+                });
+            }
+
+            // --- Lógica CRUD con Modal y SweetAlert2 ---
+            function setupAdminCRUD() {
+                const addModalBtn = document.getElementById('open-add-modal-btn');
+                const productFormModal = document.getElementById('product-form-modal');
+                const productForm = document.getElementById('product-form');
+                const formTitle = document.getElementById('form-title');
+                const formMode = document.getElementById('form-mode');
+                const tableBody = document.querySelector('#products-table tbody');
+                const cancelButton = document.getElementById('cancel-form-btn');
+
+                // FUNCIÓN PARA MOSTRAR/OCULTAR EL MODAL
+                function toggleFormModal(show, mode = 'add', data = {}) {
+                    if (show) {
+                        if (mode === 'add') {
+                            formTitle.textContent = 'Dar de Alta Nuevo Producto';
+                            formMode.value = 'add';
+                            productForm.reset();
+                            document.getElementById('productId').readOnly = false;
+                        } 
+                        else if (mode === 'edit') {
+                            formTitle.textContent = 'Modificar Producto ID: ' + data.productId;
+                            formMode.value = 'edit';
+                            
+                            // Llenar campos con datos existentes (usando las claves del JSON)
+                            document.getElementById('userId').value = data.userId;
+                            document.getElementById('productId').value = data.productId;
+                            document.getElementById('productId').readOnly = true; 
+                            document.getElementById('nombre').value = data.nombre;
+                            document.getElementById('precio').value = data.precio;
+                            document.getElementById('cantidad').value = data.cantidad;
+                            document.getElementById('imagen').value = data.imagen;
+                        }
+                        productFormModal.style.display = 'block';
+                    } else {
+                        productFormModal.style.display = 'none';
+                    }
+                }
+
+                // ABRIR MODAL (Dar de Alta)
+                if(addModalBtn) {
+                    addModalBtn.addEventListener('click', () => {
+                        toggleFormModal(true, 'add');
+                    });
+                }
+
+                // CERRAR MODAL (Cancelar)
+                if(cancelButton) {
+                    cancelButton.addEventListener('click', () => {
+                        toggleFormModal(false);
+                    });
+                }
+
+                // ----------------------------------------------------
+                // 1. MANEJO DE ALTA/MODIFICACIÓN (Botón Añadir/Guardar)
+                // ----------------------------------------------------
+                if(productForm) {
+                    productForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        
+                        const mode = formMode.value;
+                        const productName = document.getElementById('nombre').value;
+
+                        // Simulación de envío al backend (Aquí iría tu fetch)
+                        const success = Math.random() > 0.3; // Simulación: 70% de éxito
+
+                        if (success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: (mode === 'add' ? '¡Producto Agregado!' : '¡Producto Actualizado!'),
+                                text: `El producto "${productName}" ha sido ${mode === 'add' ? 'dado de alta' : 'modificado'} correctamente.`,
+                                confirmButtonText: 'Aceptar',
+                                customClass: { popup: 'dark-alert-popup' }
+                            });
+                            toggleFormModal(false);
+                            // Lógica para refrescar la tabla...
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un error al intentar guardar el producto.',
+                                confirmButtonText: 'Cerrar',
+                                customClass: { popup: 'dark-alert-popup' }
+                            });
+                        }
+                    });
+                }
+                
+                // ----------------------------------------------------
+                // 2. MANEJO DE EVENTOS DE LA TABLA (Editar y Eliminar)
+                // ----------------------------------------------------
+                if (tableBody) {
+                    tableBody.addEventListener('click', (e) => {
+                        const row = e.target.closest('tr');
+                        if (!row) return;
+
+                        const productId = row.dataset.id;
+                        
+                        // Capturar datos de la fila
+                        const data = {
+                            userId: row.dataset.userid,
+                            productId: row.dataset.id,
+                            nombre: row.dataset.nombre,
+                            precio: row.dataset.precio,
+                            cantidad: row.dataset.cantidad,
+                            imagen: row.dataset.imagen,
+                        };
+                        
+                        // --- Botón EDITAR (Modificar) ---
+                        if (e.target.classList.contains('edit-btn')) {
+                            // Muestra el modal en modo edición con los datos cargados
+                            toggleFormModal(true, 'edit', data);
+                        } 
+                        
+                        // --- Botón ELIMINAR (Baja) ---
+                        else if (e.target.classList.contains('delete-btn')) {
+                            Swal.fire({
+                                title: '¿Estás seguro?',
+                                text: `Vas a eliminar el producto ID: ${productId}. ¡Esta acción es irreversible!`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ff4d4d', 
+                                cancelButtonColor: '#a0aec0',
+                                confirmButtonText: 'Sí, ¡Eliminar!',
+                                cancelButtonText: 'Cancelar',
+                                customClass: { popup: 'dark-alert-popup' }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Simulación de eliminación exitosa
+                                    // Aquí iría tu fetch DELETE al servidor
+                                    Swal.fire({
+                                        title: '¡Eliminado!',
+                                        text: `El producto ID: ${productId} ha sido borrado correctamente.`,
+                                        icon: 'success',
+                                        customClass: { popup: 'dark-alert-popup' }
+                                    });
+                                    // Lógica para quitar la fila (row.remove())
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
