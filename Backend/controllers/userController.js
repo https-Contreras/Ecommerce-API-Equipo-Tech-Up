@@ -234,31 +234,84 @@ exports.verifyUser = async (req, res) => {
     }
 };
 
-//para formulario de contacto
-exports.contact = async(req,res)=>{
+
+
+exports.contact = async (req, res) => {
     try {
+        // 1. Recibimos los datos del front
         const { nombre, email, asunto, mensaje } = req.body;
-        
-        // ✅ Si llegaste aquí, el CAPTCHA es válido
-        
-        console.log('✅ Mensaje de contacto recibido con CAPTCHA válido:', { 
-            nombre, 
+
+        // Validación simple
+        if (!email || !mensaje) {
+            return res.status(400).json({ success: false, message: "Faltan datos requeridos." });
+        }
+
+        console.log(`📩 Nuevo mensaje de contacto de: ${email}`);
+        console.log(nombre, email, asunto, mensaje);
+
+        // 2. Armamos el HTML del correo (Con Logo, Lema y el Mensaje Requerido)
+        // Nota: Como estás en localhost, usaremos una imagen de internet como logo placeholder.
+        // Cuando subas a producción, pones la URL real de tu logo.
+        const htmlBody = `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                
+                <div style="background-color: #1a202c; padding: 20px; text-align: center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3067/3067260.png" alt="Tech-Up Logo" style="width: 60px; height: 60px; margin-bottom: 10px;">
+                    
+                    <h1 style="margin: 0; color: #00e5ff; font-size: 28px; letter-spacing: 1px;">Tech-Up</h1>
+                    
+                    <p style="margin: 5px 0 0; color: #a0aec0; font-style: italic; font-size: 14px;">
+                        "El futuro del cómputo, ahora."
+                    </p>
+                </div>
+
+                <div style="padding: 30px 20px; color: #333;">
+                    <h2 style="color: #1a202c; margin-top: 0;">¡Hola, ${nombre}!</h2>
+                    
+                    <p style="font-size: 16px; line-height: 1.5;">
+                        Hemos recibido tu mensaje con el asunto: <strong>"${asunto}"</strong>.
+                    </p>
+
+                    <div style="background-color: #e6fffa; border-left: 4px solid #00e5ff; padding: 15px; margin: 20px 0;">
+                        <p style="margin: 0; font-size: 18px; font-weight: bold; color: #00798c;">
+                            En breve será atendido.
+                        </p>
+                        <p style="margin: 5px 0 0; font-size: 14px;">
+                            Nuestro equipo de soporte ya está revisando tu solicitud.
+                        </p>
+                    </div>
+
+                    <p>Tu mensaje original:</p>
+                    <blockquote style="background: #fff; border: 1px solid #ddd; padding: 10px; font-style: italic; color: #555;">
+                        "${mensaje}"
+                    </blockquote>
+                </div>
+
+                <div style="background-color: #eee; padding: 15px; text-align: center; font-size: 12px; color: #666;">
+                    <p>&copy; 2025 Tech-Up. Todos los derechos reservados.</p>
+                    <p>Este es un correo automático, por favor no respondas.</p>
+                </div>
+            </div>
+        `;
+
+        // 3. Enviamos el correo usando tu mailer
+        await mailer.sendEmail(
             email, 
-            asunto,
-            mensaje
-        });
-        
-        // Por ahora simulamos el envío exitoso
-        res.json({
+            `Tech-Up Servicio de contacto`, 
+            htmlBody
+        );
+
+        res.status(200).json({
             success: true,
-            message: 'Mensaje enviado exitosamente'
+            message: "Mensaje enviado correctamente. Revisa tu correo."
         });
-        
+
     } catch (error) {
-        console.error('❌ Error enviando mensaje:', error);
+        console.error("❌ Error en contacto:", error);
         res.status(500).json({
             success: false,
-            message: 'Error al enviar el mensaje'
+            message: "Error al enviar el mensaje",
+            error: error.message
         });
     }
 };

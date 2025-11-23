@@ -48,7 +48,6 @@ exports.getProductById = async (req, res) => {
       });
     }
 
-    console.log(`📦 Producto solicitado: ${product.nombre}`);
 
     res.status(200).json({
       success: true,

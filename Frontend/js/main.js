@@ -72,7 +72,6 @@ async function cargarProductos(filtros = {}) {
     }
 }
 
-
 /**
  * 3. Dibuja los productos y reactiva los botones del carrito
  */
@@ -89,8 +88,23 @@ function mostrarProductos(productos) {
         const card = document.createElement('article');
         card.classList.add('product-card');
 
-        // Aseguramos que el precio sea número (por si viene como string de la BD)
+        // Aseguramos que el precio sea número
         const precioNum = parseFloat(producto.precio);
+        
+        // --- LÓGICA DE STOCK ---
+        const stock = producto.stock !== undefined ? parseInt(producto.stock) : 0;
+        const estaAgotado = stock <= 0;
+
+        // Variables visuales según el stock
+        const etiquetaStock = estaAgotado 
+            ? '<span style="color: #ff4d4d; font-weight: bold;">🚫 Agotado</span>' 
+            : `<span style="color: var(--color-primary);">Stock: ${stock}</span>`;
+
+        const attrDisabled = estaAgotado ? 'disabled' : '';
+        const textoBoton = estaAgotado ? 'Sin Stock' : 'Agregar al carrito';
+        
+        // Estilo inline para apagar el botón si no hay stock (opcional, pero se ve mejor)
+        const estiloBoton = estaAgotado ? 'opacity: 0.5; cursor: not-allowed; border-color: #555; color: #aaa;' : '';
 
         card.innerHTML = `
             <div class="product-image-container">
@@ -99,19 +113,24 @@ function mostrarProductos(productos) {
             <div class="product-info">
                 <h3 class="product-title">${producto.nombre}</h3>
                 <p class="product-description">${producto.descripcion || ''}</p>
-                <p class="product-price">$${precioNum.toFixed(2)}</p>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                    <p class="product-price">$${precioNum.toFixed(2)}</p>
+                    <p style="font-size: 0.9rem;">${etiquetaStock}</p>
+                </div>
                 
                 <button class="add-to-cart-btn" 
                     data-id="${producto.id}"
                     data-nombre="${producto.nombre}"
                     data-precio="${precioNum}"
-                    data-imagen="${producto.imagen || 'assets/images/placeholder.jpg'}">
-                    Agregar al carrito
+                    data-imagen="${producto.imagen || 'assets/images/placeholder.jpg'}"
+                    ${attrDisabled} 
+                    style="${estiloBoton}">
+                    ${textoBoton}
                 </button>
             </div>
         `;
 
         productListElement.appendChild(card);
     });
-
 };
