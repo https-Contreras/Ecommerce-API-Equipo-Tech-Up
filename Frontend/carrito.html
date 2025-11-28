@@ -1,54 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tu Carrito de Compras - Tech-Up</title>
     
-    <link rel="stylesheet" href="/Frontend/CSS/main.css">
-    
-    <script src="/Frontend/js/loadComponents.js" defer></script>
-    <script src="/Frontend/js/carrito.js" defer></script> </head>
-<body>
+    <script>
+        (function() {
+            const user = localStorage.getItem('userName');
+            const userKey = user ? user.replace(/\s+/g, '_') : 'guest';
+            const savedTheme = localStorage.getItem(`theme_${userKey}`);
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
 
+    <link rel="stylesheet" href="/Frontend/CSS/main.css" />
+    <link rel="stylesheet" href="/Frontend/CSS/carrito-styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
     <header class="site-header" id="main-header"></header>
 
     <main class="container">
-        <h2>Tu Carrito de Compras</h2>
-        
-        <div class="cart-wrapper">
-            
-            <div id="cart-items-list" class="cart-items-list">
-                
-                </div> <aside class="cart-summary">
-                <h3>Resumen de tu Pedido</h3>
-                
-                <div class="summary-line">
-                    <span>Subtotal:</span>
-                    <span id="summary-subtotal">$0.00</span>
-                </div>
-                <div class="summary-line">
-                    <span>Envío:</span>
-                    <span id="summary-shipping">Por calcular</span>
-                </div>
-                
-                <div class="coupon-group">
-                    <label for="coupon-code">Cupón:</label>
-                    <input type="text" id="coupon-code" placeholder="EJ: TECHUP10">
-                    <button class="coupon-btn">Aplicar</button>
-                </div>
+      <h2>Tu Carrito de Compras</h2>
 
-                <div class="summary-line total">
-                    <span>Total:</span>
-                    <span id="summary-total">$0.00</span>
-                </div>
-                
-                <button class="submit-btn checkout-btn">Finalizar Compra</button>
-            </aside>
-            
-        </div> </main>
+      <div class="cart-wrapper">
+        <div id="cart-items-list" class="cart-items-list">
+          <div class="cart-loading" style="text-align: center; padding: 3rem;">
+            <p style="color: var(--color-text-muted);">Cargando tu carrito...</p>
+          </div>
+        </div>
+        
+        <aside class="cart-summary">
+          <h3>Resumen de tu Pedido</h3>
+
+          <div class="shipping-group" style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem;">
+            <label for="shipping-country" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-muted); font-size: 0.9rem;">País de Envío:</label>
+            <select id="shipping-country" style="width: 100%; padding: 0.6rem; background-color: var(--color-background); color: var(--color-text); border: 1px solid var(--color-primary); border-radius: 5px; cursor: pointer;">
+                <option value="mx">México</option>
+                <option value="usa">Estados Unidos</option>
+                <option value="ca">Canadá</option>
+            </select>
+          </div>
+          <div class="summary-line">
+            <span>Subtotal:</span>
+            <span id="summary-subtotal">$0.00</span>
+          </div>
+          
+          <div class="summary-line">
+            <span>Envío:</span>
+            <span id="summary-shipping">Por calcular</span>
+          </div>
+
+          <div class="coupon-group">
+            <label for="coupon-code">Cupón:</label>
+            <input type="text" id="coupon-code" placeholder="Ej: WELCOME10" />
+            <button class="coupon-btn">Aplicar</button>
+          </div>
+
+          <div class="summary-line total">
+            <span>Total:</span>
+            <span id="summary-total">$0.00</span>
+          </div>
+
+          <button class="submit-btn checkout-btn">Finalizar Compra</button>
+          
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border);">
+            <p style="color: var(--color-text-muted); font-size: 0.85rem; text-align: center;">
+              🔒 Pago 100% seguro<br/>📦 Envíos Internacionales
+            </p>
+          </div>
+          
+          <details style="margin-top: 1rem;">
+            <summary style="color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer;">💡 Cupones de prueba</summary>
+            <ul style="color: var(--color-text-muted); font-size: 0.75rem; margin-top: 0.5rem; padding-left: 1rem;">
+              <li><strong>WELCOME10</strong> - 10% descuento</li>
+              <li><strong>TECHUP20</strong> - 20% descuento</li>
+              <li><strong>DESCUENTO50</strong> - $50 de descuento</li>
+              <li><strong>ENVIOGRATIS</strong> - Envío gratis</li>
+              <li><strong>BLACKFRIDAY</strong> - 25% descuento</li>
+            </ul>
+          </details>
+        </aside>
+      </div>
+    </main>
 
     <footer class="site-footer" id="main-footer"></footer>
-
-</body>
+    
+    <script src="/Frontend/js/footer.js"></script>
+    <script src="/Frontend/js/loadComponents.js"></script>
+    <script src="/Frontend/js/accesibilidad.js"></script>
+    <script src="/Frontend/js/carrito.js"></script>
+  </body>
 </html>

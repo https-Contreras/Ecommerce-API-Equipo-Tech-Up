@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - Tech-Up</title>
+    <script>
+        (function() {
+            const user = localStorage.getItem('userName');
+            const userKey = user ? user.replace(/\s+/g, '_') : 'guest';
+            
+
+            const savedTheme = localStorage.getItem(`theme_${userKey}`);
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="/Frontend/CSS/main.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/Frontend/js/loadComponents.js" defer></script>
+    <script src="js/accesibilidad.js" ></script>
+    <script src="js/forgot-password.js" defer></script> </head>
+<body>
+
+    <header class="site-header" id="main-header"></header>
+
+    <main class="container">
+        
+        <div class="form-container">
+            <h2>Recuperar Contraseña</h2>
+            <p style="text-align: center; color: var(--color-text-muted); margin-bottom: 2rem;">
+                Ingresa tu correo electrónico y te enviaremos un enlace para reestablecer tu contraseña.
+            </p>
+            
+            <form id="forgot-form" class="contact-form">
+                
+                <div class="form-group">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Correo Electrónico</label>
+                </div>
+
+                <p id="form-message" class="form-message"></p>
+
+                <button type="submit" class="submit-btn">Enviar Enlace</button>
+
+                <div class="form-links" style="justify-content: center;">
+                    <a href="login.html">Volver a Iniciar Sesión</a>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <footer class="site-footer" id="main-footer"></footer>
+
+</body>
+</html>

@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const registerForm = document.getElementById('register-form');
-    if (!registerForm) return; // No hacer nada si no estamos en esta página
+    if (!registerForm) return;
 
     registerForm.addEventListener('submit', async (event) => {
-        // 1. Evita que la página se recargue
         event.preventDefault();
 
         const nombre = document.getElementById('nombre').value;
@@ -12,51 +10,116 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
         const passwordConfirm = document.getElementById('password-confirm').value;
         
-        const messageElement = document.getElementById('register-message');
+        // Ya no necesitamos 'messageElement'
         const submitBtn = registerForm.querySelector('.submit-btn');
 
-        // --- INICIO DE VALIDACIÓN EN CLIENTE  ---
-        
-        // 2. Limpia errores previos
-        messageElement.textContent = '';
 
-        // 3. Revisa que las contraseñas coincidan
+        // Validaciones
         if (password !== passwordConfirm) {
-            messageElement.textContent = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
-            messageElement.style.color = '#ff4d4d'; // Rojo para error
-            return; // Detiene la ejecución
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden.',
+                icon: 'error',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
+            return;
         }
 
         if (password.length < 8) {
-             messageElement.textContent = 'Tu contraseña debe tener al menos 8 caracteres.';
-             messageElement.style.color = '#ff4d4d';
-             return;
+            Swal.fire({
+                title: 'Contraseña Débil',
+                text: 'Tu contraseña debe tener al menos 8 caracteres.',
+                icon: 'warning',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
+            return;
         }
-        // --- FIN DE VALIDACIÓN EN CLIENTE ---
+
+        // ✅ VALIDAR CAPTCHA
+        const captchaResponse = grecaptcha.getResponse();
+        
+        if (!captchaResponse) {
+            
+            Swal.fire({
+                title: 'Falta el Captcha',
+                text: 'Por favor, confirma que no eres un robot.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+                background: '#1a202c', // Tu tema dark
+                color: '#e2e8f0'
+            });
+            return; 
+        }
+
 
         submitBtn.textContent = 'Creando...';
         submitBtn.disabled = true;
 
-        // 4. Prepara los datos para el backend
-        const formData = {
-            nombre: nombre,
-            email: email,
-            password: password
-        };
-        
-        // (Por ahora solo lo mostramos en consola)
-        console.log("Datos listos para enviar al backend:", formData);
+        try {
+            // Enviar al backend CON el token del captcha
+            const response = await fetch('http://localhost:3000/tech-up/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre: nombre,
+                    email: email,
+                    password: password,
+                    captchaToken: captchaResponse // ← Incluir el token
+                })
+            });
 
-        // --- SIMULACIÓN DE ÉXITO ---
-        // (Aquí irá tu 'fetch' al API de /api/auth/register)
-        setTimeout(() => {
-            messageElement.textContent = '¡Cuenta creada con éxito! Ahora puedes iniciar sesión.';
-            messageElement.style.color = 'var(--color-primary)'; // Verde/Neón para éxito
-            
+            const data = await response.json();
+
+            if (response.ok) {
+                // --- ÉXITO ---
+                Swal.fire({
+                    title: '¡Cuenta Creada!',
+                    text: data.message || '¡Usuario registrado con éxito!',
+                    icon: 'success',
+                    background: '#1a202c',
+                    color: '#e2e8f0'
+                });
+                
+                submitBtn.textContent = 'Crear Cuenta';
+                submitBtn.disabled = false;
+                registerForm.reset(); // Limpia el formulario
+                
+                 //Redirigir al login
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+
+            } else {
+                // --- ERROR DEL SERVIDOR (Ej. email ya existe) ---
+                Swal.fire({
+                    title: 'Error en el Registro',
+                    text: data.message || 'No se pudo completar el registro.',
+                    icon: 'error',
+                    confirmButtonText: 'Intentar de nuevo',
+                    background: '#1a202c',
+                    color: '#e2e8f0'
+                });
+                submitBtn.textContent = 'Crear Cuenta';
+                submitBtn.disabled = false;
+            }
+            // --- FIN DE LLAMADA AL BACKEND ---
+
+        } catch (error) {
+            console.error("Error de fetch:", error);
+            Swal.fire({
+                title: 'Error de Conexión',
+                text: 'No se pudo conectar al servidor. Intenta más tarde.',
+                icon: 'error',
+                confirmButtonText: 'Entendido',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
             submitBtn.textContent = 'Crear Cuenta';
             submitBtn.disabled = false;
-            registerForm.reset(); // Limpia el formulario
-        }, 1500);
-
+        }
     });
 });

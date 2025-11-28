@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech-Up | Panel de Administración</title>
+    
+    <link rel="stylesheet" href="css/main.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/admin-logic.js"></script>
+    <script src="js/loadComponents.js" defer></script>
+    <script src="/Frontend/js/accesibilidad.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+
+    <header class="site-header" id="main-header"></header>
+
+    <main class="container admin-container">
+        
+        <div class="admin-header">
+            <div>
+                <h1>Panel de Control</h1>
+                <p>Gestión de inventario y análisis de ventas.</p>
+            </div>
+            <button id="btn-add-product" class="submit-btn">
+                <i class="fas fa-plus"></i> Nuevo Producto
+            </button>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-target="section-inventory">Inventario</button>
+            <button class="admin-tab" data-target="section-stats">Estadísticas</button>
+        </div>
+
+        <section id="section-inventory" class="admin-section active">
+            <div class="table-tools" style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <label for="admin-filter-cat" style="color: var(--color-text-muted); font-weight: 600;">Filtrar por:</label>
+                    <select id="admin-filter-cat" class="filter-select" style="width: 200px; padding: 0.5rem;">
+                        <option value="all">Todas las Categorías</option>
+                        <option value="laptops">Laptops</option>
+                        <option value="desktops">Desktops</option>
+                        <option value="accesorios">Accesorios</option>
+                    </select>
+                </div>
+                
+                <span id="inventory-count" style="color: var(--color-text-muted); font-size: 0.9rem;">Mostrando: Todos</span>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagen</th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-products-list">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+<section id="section-stats" class="admin-section">
+            <div class="charts-grid">
+                
+                <div class="chart-card">
+                    <h3>Ventas Mensuales</h3>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Inventario por Categoría</h3>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="inventoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">
+                    <h3>Ingresos Totales</h3>
+                    <div class="stat-number" id="total-sales-display">$0.00</div>
+                    <p>Ventas Históricas</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <div id="product-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-modal" class="close-btn">&times;</span>
+            <h2 id="modal-title">Nuevo Producto</h2>
+            
+            <form id="product-form">
+                <input type="hidden" id="prod-id"> 
+                
+                <div class="form-group">
+                    <input type="text" id="prod-nombre" placeholder=" " required>
+                    <label for="prod-nombre">Nombre del Producto</label>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="number" id="prod-precio" step="0.01" placeholder=" " required>
+                        <label for="prod-precio">Precio</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="prod-stock" placeholder=" " required>
+                        <label for="prod-stock">Stock</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prod-categoria" style="position:static; display:block; margin-bottom:5px; font-size:0.8rem; color:var(--color-primary);">Categoría</label>
+                    <select id="prod-categoria" class="filter-select" style="width: 100%;">
+                        <option value="laptops">Laptops</option>
+                        <option value="desktops">Desktops</option>
+                        <option value="accesorios">Accesorios</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="prod-descripcion" rows="3" placeholder=" "></textarea>
+                    <label for="prod-descripcion">Descripción</label>
+                </div>
+
+                <div class="form-group">
+                    <input type="url" id="prod-imagen" placeholder=" ">
+                    <label for="prod-imagen">URL Imagen</label>
+                </div>
+
+                <div class="form-check" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+                    <input type="checkbox" id="prod-oferta">
+                    <label for="prod-oferta" style="position: static; margin-left: 0.5rem;">¿En Oferta?</label>
+                </div>
+
+                <button type="submit" class="submit-btn">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer" id="main-footer"></footer>
+
+</body>
+</html>

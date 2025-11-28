@@ -1,150 +1,219 @@
-// 1. Espera a que todo el HTML esté cargado
+// Frontend/js/main.js
+
+/**
+ * MAIN.JS
+ * Lógica principal de la página de productos
+ * ACTUALIZADO: Ahora integra con el backend del carrito
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Llama a la función principal para cargar y mostrar productos
     cargarProductos();
-    
-    
-    // ##### INICIO DE LA SECCIÓN DE FILTROS #####
-    
-    // 1. Seleccionamos los filtros
+    cargarContadorCarrito();
+
     const filtroCategoria = document.getElementById('filter-categoria');
     const filtroPrecio = document.getElementById('filter-precio');
     const filtroOferta = document.getElementById('filter-oferta');
 
-    // 2. Creamos una función para "escuchar" los cambios
     function handleFilterChange() {
-        const filtrosSeleccionados = {
-            categoria: filtroCategoria.value,
-            precio: filtroPrecio.value,
-            oferta: filtroOferta.checked // .checked nos da true o false
-        };
-        
-        console.log("FILTROS CAMBIARON:", filtrosSeleccionados);
-        
-        // ¡PRÓXIMO PASO!
-        // Aquí es donde llamaríamos de nuevo a la API o
-        // filtraríamos los productos que ya tenemos.
-        // Ej: cargarProductos(filtrosSeleccionados);
+        const filtros = {};
+        if (filtroCategoria && filtroCategoria.value !== 'all') filtros.categoria = filtroCategoria.value;
+        if (filtroPrecio && filtroPrecio.value !== 'all') filtros.precio = filtroPrecio.value;
+        if (filtroOferta && filtroOferta.checked) filtros.oferta = 'true';
+        cargarProductos(filtros);
     }
 
-    // 3. Agregamos los 'listeners'
-    // (Nos aseguramos de que existan antes de agregar el listener,
-    //  así este script no dará error en otras páginas como index.html)
-    if (filtroCategoria) {
-        filtroCategoria.addEventListener('change', handleFilterChange);
-    }
-    if (filtroPrecio) {
-        filtroPrecio.addEventListener('change', handleFilterChange);
-    }
-    if (filtroOferta) {
-        filtroOferta.addEventListener('change', handleFilterChange);
-    }
-    
-    // ##### FIN DE LA SECCIÓN DE FILTROS #####
+    if (filtroCategoria) filtroCategoria.addEventListener('change', handleFilterChange);
+    if (filtroPrecio) filtroPrecio.addEventListener('change', handleFilterChange);
+    if (filtroOferta) filtroOferta.addEventListener('change', handleFilterChange);
 });
 
-
-/**
- * 2. Carga los productos (simulando una llamada a la API)
- * * Usamos async/await para simular cómo funcionará 'fetch'
- * cuando conectemos el backend real.
- */
-async function cargarProductos() {
+async function cargarContadorCarrito() {
+    const token = localStorage.getItem('userToken');
+    const cartCount = document.getElementById('cart-count');
     
-    // Verificamos que el contenedor de productos exista en esta página
+    if (!token || !cartCount) {
+        if (cartCount) cartCount.textContent = '0';
+        return;
+    }
+    
+    try {
+        const response = await fetch('http://localhost:3000/api/cart', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        if (response.ok && data.success) {
+            cartCount.textContent = data.data.resumen.cantidadItems || 0;
+        }
+    } catch (error) {
+        console.log('No se pudo cargar el contador del carrito');
+    }
+}
+
+async function cargarProductos(filtros = {}) {
     const productListElement = document.getElementById('product-list');
-    if (!productListElement) {
-        // Si no existe (ej. estamos en index.html), no hacemos nada.
+    if (!productListElement) return;
+
+    try {
+        const url = new URL('http://localhost:3000/tech-up/api/products');
+        if (filtros.categoria) url.searchParams.append('categoria', filtros.categoria);
+        if (filtros.precio) url.searchParams.append('precio', filtros.precio);
+        if (filtros.oferta) url.searchParams.append('oferta', filtros.oferta);
+
+        const response = await fetch(url);
+        const json = await response.json();
+
+        if (json.success) {
+            mostrarProductos(json.data);
+        } else {
+            productListElement.innerHTML = `<p>Error al cargar productos: ${json.message}</p>`;
+        }
+
+    } catch (error) {
+        productListElement.innerHTML = '<p>No se pudo conectar con el servidor.</p>';
+    }
+}
+
+function mostrarProductos(productos) {
+    const productListElement = document.getElementById('product-list');
+    productListElement.innerHTML = '';
+
+    if (productos.length === 0) {
+        productListElement.innerHTML = '<h3 style="width:100%; text-align:center;">No se encontraron productos con esos filtros.</h3>';
         return;
     }
 
-    try {
-        // --- SIMULACIÓN DE DATOS DEL BACKEND ---
-        // Cuando tu backend esté listo, reemplazarás todo este bloque
-        // por algo como:
-        // const respuesta = await fetch('http://tu-api.com/api/productos');
-        // const productos = await respuesta.json();
-
-        // Por ahora, usamos datos "quemados" (hardcodeados)
-        const productosSimulados = [
-            {
-                id: 1,
-                nombre: "Laptop Gamer Avanzada",
-                descripcion: "Core i9, 32GB RAM, SSD 2TB, RTX 4080",
-                precio: 48500.00,
-                imagen: "assets/images/laptop-gamer.jpg" // Asegúrate de tener esta imagen de prueba
-            },
-            {
-                id: 2,
-                nombre: "Estación de Trabajo (Desktop)",
-                descripcion: "Threadripper, 64GB RAM, SSD 4TB, Quadro RTX A4000",
-                precio: 89900.00,
-                imagen: "assets/images/desktop-workstation.jpg"
-            },
-            {
-                id: 3,
-                nombre: "Monitor Curvo Ultrawide 49\"",
-                descripcion: "Panel OLED, 240Hz, 1ms respuesta",
-                precio: 21200.00,
-                imagen: "assets/images/monitor-ultrawide.jpg"
-            },
-            {
-                id: 4,
-                nombre: "Teclado Mecánico RGB",
-                descripcion: "Switches ópticos, layout completo, reposamuñecas",
-                precio: 3100.00,
-                imagen: "assets/images/teclado-mecanico.jpg"
-            }
-        ];
-        // --- FIN DE LA SIMULACIÓN ---
-        
-        // 3. Llama a la función que "dibuja" los productos en el HTML
-        mostrarProductos(productosSimulados);
-
-    } catch (error) {
-        console.error("Error al cargar los productos:", error);
-    }
-}
-
-
-/**
- * 4. Dibuja las tarjetas de producto en el DOM
- * @param {Array} productos - El listado de productos a mostrar
- */
-function mostrarProductos(productos) {
-    // 1. Obtenemos el contenedor donde irán los productos
-    const productListElement = document.getElementById('product-list');
-    
-    // 2. Limpiamos cualquier contenido previo (como un "Cargando...")
-    productListElement.innerHTML = '';
-
-    // 3. Recorremos el arreglo de productos
     productos.forEach(producto => {
-        
-        // 4. Creamos un nuevo elemento 'article' por cada producto
         const card = document.createElement('article');
-        card.classList.add('product-card'); // Le ponemos la clase CSS
+        card.classList.add('product-card');
 
-        // 5. Generamos el HTML interno de la tarjeta (¡Esta es la magia!)
-        // Usamos template literals (comillas ``) para insertar variables
+        const precioNum = parseFloat(producto.precio);
+        const stock = producto.stock !== undefined ? parseInt(producto.stock) : 0;
+        const estaAgotado = stock <= 0;
+
+        const etiquetaStock = estaAgotado 
+            ? '<span style="color: #ff4d4d; font-weight: bold;">🚫 Agotado</span>' 
+            : `<span style="color: var(--color-primary);">Stock: ${stock}</span>`;
+
+        const attrDisabled = estaAgotado ? 'disabled' : '';
+        const textoBoton = estaAgotado ? 'Sin Stock' : 'Agregar al carrito';
+        const estiloBoton = estaAgotado ? 'opacity: 0.5; cursor: not-allowed;' : '';
+
         card.innerHTML = `
             <div class="product-image-container">
-                <img src="${producto.imagen}" alt="${producto.nombre}">
+                <img src="${producto.imagen || 'assets/images/placeholder.jpg'}" alt="${producto.nombre}">
             </div>
             <div class="product-info">
                 <h3 class="product-title">${producto.nombre}</h3>
-                <p class="product-description">${producto.descripcion}</p>
-                
-                <p class="product-price">$${producto.precio.toFixed(2)}</p>
-                
-                <button class="add-to-cart-btn" data-product-id="${producto.id}">
-                    Agregar al carrito
-                </button>
+                <p class="product-description">${producto.descripcion || ''}</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                    <p class="product-price">$${precioNum.toFixed(2)}</p>
+                    <p style="font-size: 0.9rem;">${etiquetaStock}</p>
+                </div>
+                <button class="add-to-cart-btn" data-id="${producto.id}" ${attrDisabled} style="${estiloBoton}">${textoBoton}</button>
             </div>
         `;
 
-        // 6. Añadimos la tarjeta recién creada al contenedor en el HTML
         productListElement.appendChild(card);
     });
+
+    agregarEventListenersCarrito();
 }
+
+function agregarEventListenersCarrito() {
+    const botones = document.querySelectorAll('.add-to-cart-btn:not([disabled])');
+    
+    botones.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const productId = parseInt(btn.dataset.id);
+            const textoOriginal = btn.textContent;
+            btn.textContent = 'Agregando...';
+            btn.disabled = true;
+            
+            await agregarAlCarritoDesdeProductos(productId);
+            
+            setTimeout(() => {
+                btn.textContent = textoOriginal;
+                btn.disabled = false;
+            }, 500);
+        });
+    });
+}
+
+async function agregarAlCarritoDesdeProductos(productId, cantidad = 1) {
+    const token = localStorage.getItem('userToken');
+    
+    if (!token) {
+        const result = await Swal.fire({
+            title: 'Inicia Sesión',
+            text: 'Necesitas iniciar sesión para agregar productos al carrito',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Ir a Login',
+            cancelButtonText: 'Cancelar',
+            background: '#1a202c',
+            color: '#e2e8f0'
+        });
+        if (result.isConfirmed) window.location.href = 'login.html';
+        return false;
+    }
+    
+    try {
+        const response = await fetch('http://localhost:3000/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId, cantidad })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = data.data.resumen.cantidadItems;
+                cartCount.style.transform = 'scale(1.3)';
+                setTimeout(() => { cartCount.style.transform = 'scale(1)'; }, 200);
+            }
+            
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                background: '#1a202c',
+                color: '#e2e8f0'
+            }).fire({ icon: 'success', title: data.message });
+            
+            return true;
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: data.message || 'No se pudo agregar al carrito',
+                icon: 'error',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
+            return false;
+        }
+        
+    } catch (error) {
+        Swal.fire({
+            title: 'Error de conexión',
+            text: 'No se pudo conectar con el servidor',
+            icon: 'error',
+            background: '#1a202c',
+            color: '#e2e8f0'
+        });
+        return false;
+    }
+}
+
+window.agregarAlCarrito = agregarAlCarritoDesdeProductos;
+console.log('✅ main.js cargado con integración de carrito');

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - Tech-Up</title>
+    
+    <script>
+        (function() {
+            const user = localStorage.getItem('userName');
+            const userKey = user ? user.replace(/\s+/g, '_') : 'guest';
+            const savedTheme = localStorage.getItem(`theme_${userKey}`);
+            if (savedTheme === 'light') document.documentElement.classList.add('light-mode');
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/Frontend/CSS/main.css">
+    <link rel="stylesheet" href="/Frontend/CSS/checkout-styles.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <header class="site-header" id="main-header"></header>
+
+    <main class="container">
+        <h2>Finalizar Compra</h2>
+
+        <div class="checkout-wrapper">
+            
+            <div class="checkout-form-section">
+                
+                <section class="checkout-section">
+                    <h3>📍 Datos de Envío y Facturación</h3>
+                    <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Estos datos aparecerán en tu nota de compra PDF.
+                    </p>
+                    
+                    <form id="shipping-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="ship-name" required placeholder=" ">
+                                <label for="ship-name">Nombre Completo (Quien recibe)</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="ship-email" required placeholder=" ">
+                                <label for="ship-email">Correo de Contacto</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="tel" id="ship-phone" required placeholder=" ">
+                                <label for="ship-phone">Teléfono</label>
+                            </div>
+                            <div class="form-group" style="flex: 2;">
+                                <input type="text" id="ship-address" required placeholder=" ">
+                                <label for="ship-address">Calle y Número</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="ship-colonia" required placeholder=" ">
+                                <label for="ship-colonia">Colonia</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="ship-zip" required placeholder=" ">
+                                <label for="ship-zip">Código Postal</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="ship-city" required placeholder=" ">
+                                <label for="ship-city">Ciudad</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="ship-state" required placeholder=" ">
+                                <label for="ship-state">Estado</label>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="checkout-section">
+                    <h3>💳 Método de Pago</h3>
+                    
+                    <div class="payment-options">
+                        <label class="payment-option active" data-method="tarjeta">
+                            <input type="radio" name="payment-method" value="tarjeta" checked>
+                            <div class="payment-option-content">
+                                <span class="payment-icon">💳</span>
+                                <span class="payment-name">Tarjeta</span>
+                            </div>
+                        </label>
+                        <label class="payment-option" data-method="oxxo">
+                            <input type="radio" name="payment-method" value="oxxo">
+                            <div class="payment-option-content">
+                                <span class="payment-icon">🏪</span>
+                                <span class="payment-name">OXXO</span>
+                            </div>
+                        </label>
+                        <label class="payment-option" data-method="transferencia">
+                            <input type="radio" name="payment-method" value="transferencia">
+                            <div class="payment-option-content">
+                                <span class="payment-icon">🏦</span>
+                                <span class="payment-name">Transferencia</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <form id="form-tarjeta" class="payment-form active">
+                        <h4>Datos de Tarjeta</h4>
+                        <div class="form-group">
+                            <input type="text" id="card-name" placeholder=" " autocomplete="cc-name">
+                            <label>Titular de la Tarjeta</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="card-number" placeholder=" " maxlength="19" autocomplete="cc-number">
+                            <label>Número</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="card-cvv" placeholder="CVV" maxlength="4">
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="form-oxxo" class="payment-form">
+                        <div class="oxxo-info">
+                            <p>Se enviará una referencia de pago a tu correo.</p>
+                        </div>
+                    </div>
+
+                    <div id="form-transferencia" class="payment-form">
+                        <div class="transfer-info">
+                            <p>Te enviaremos la CLABE interbancaria para realizar el pago.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="captcha-section" style="margin-top: 2rem; display: flex; justify-content: center;">
+                    <div class="g-recaptcha" data-sitekey="6Le84A0sAAAAAFllLkm3fs8hIY90-EZp6yQOfCL0"></div>
+                </div>
+
+                <button type="button" id="btn-confirmar-pago" class="submit-btn checkout-btn" style="margin-top: 2rem;">
+                    🔒 Confirmar Compra y Generar Nota
+                </button>
+            </div>
+
+            <aside class="checkout-summary">
+                <h3>Resumen del Pedido</h3>
+                
+                <div id="checkout-items" class="checkout-items-list">
+                    <p style="text-align:center; color:var(--color-text-muted);">Cargando...</p>
+                </div>
+
+                <div class="summary-totals">
+                    <div class="summary-line">
+                        <span>Subtotal:</span>
+                        <span id="checkout-subtotal">$0.00</span>
+                    </div>
+                    
+                    <div class="summary-line" id="checkout-discount-line" style="display: none;">
+                        <span>Descuento:</span>
+                        <span id="checkout-discount">-$0.00</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Envío:</span>
+                        <span id="checkout-shipping">$0.00</span>
+                    </div>
+                    
+                    <div class="summary-line total">
+                        <span>Total a Pagar:</span>
+                        <span id="checkout-total">$0.00</span>
+                    </div>
+                </div>
+
+                <button id="btn-confirmar-pago" class="submit-btn checkout-btn">
+                    Confirmar Compra
+                </button>
+                
+                <a href="carrito.html" class="back-to-cart">← Volver al carrito</a>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="site-footer" id="main-footer"></footer>
+    
+    <script src="/Frontend/js/loadComponents.js"></script>
+    <script src="/Frontend/js/checkout.js"></script>
+</body>
+</html>

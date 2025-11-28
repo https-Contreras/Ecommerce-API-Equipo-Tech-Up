@@ -1,23 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const loginForm = document.getElementById('login-form');
-    if (!loginForm) return; 
+    if (!loginForm) return;
 
     loginForm.addEventListener('submit', async (event) => {
-        // 1. Evita que la página se recargue
         event.preventDefault();
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const messageElement = document.getElementById('login-message');
         const submitBtn = loginForm.querySelector('.submit-btn');
 
-        messageElement.textContent = ''; 
+        // 1. ✅ VALIDAR CAPTCHA ANTES DE NADA
+        // Verificamos que grecaptcha esté cargado para evitar errores
+        if (typeof grecaptcha === 'undefined') {
+            console.error('El script de reCAPTCHA no se ha cargado.');
+            return;
+        }
+
+        const captchaResponse = grecaptcha.getResponse();
+
+        if (!captchaResponse) {
+            // ALERTA SI FALTA EL CAPTCHA
+            Swal.fire({
+                title: 'Falta el Captcha',
+                text: 'Por favor, confirma que no eres un robot.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+                background: '#1a202c', // Tu tema dark
+                color: '#e2e8f0'
+            });
+            return; // Detenemos el código aquí, no se envía nada al back
+        }
+
+        // Si pasó el captcha, procedemos
         submitBtn.textContent = 'Verificando...';
         submitBtn.disabled = true;
 
         try {
-            // 2. Llama a tu API de backend
             const response = await fetch('http://localhost:3000/tech-up/users/login', {
                 method: 'POST',
                 headers: {
@@ -25,43 +43,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     email: email,
-                    password: password
+                    password: password,
+                    captchaToken: captchaResponse // Enviamos el token al back
                 })
             });
 
-            // 3. Esperamos la respuesta JSON del backend
             const data = await response.json();
 
-            // 4. Imprime la respuesta COMPLETA del servidor en la consola
-            console.log("Respuesta del servidor:", data);
-
-            // 5. Reaccionamos según la respuesta
             if (response.ok) {
-                
-                // ¡ÉXITO! Solo muestra una alerta
-                alert('¡Login exitoso! (Respuesta de prueba del backend)');
-                
-                // Muestra el mensaje de éxito
-                messageElement.textContent = '¡Login exitoso!';
-                messageElement.style.color = 'var(--color-primary)';
-                
-                // (Ya no intentamos guardar en localStorage ni redirigir)
-                submitBtn.textContent = 'Entrar';
-                submitBtn.disabled = false;
-                
+                // --- ÉXITO ---
+                Swal.fire({
+                    title: '¡Bienvenido!',
+                    text: 'Inicio de sesión exitoso.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: '#1a202c',
+                    color: '#e2e8f0'
+                }).then(() => {
+                    localStorage.setItem('userName', data.user.nombre);
+                    localStorage.setItem('userToken', data.token);
+                    window.location.href = 'index.html';
+                });
+
             } else {
-                // ¡ERROR! (Ej. contraseña incorrecta)
-                messageElement.textContent = data.message || 'Error en tus credenciales';
+                // --- ERROR (Credenciales o Captcha inválido en back) ---
+                Swal.fire({
+                    title: 'Error de Acceso',
+                    text: data.message || 'Credenciales incorrectas',
+                    icon: 'error',
+                    confirmButtonText: 'Intentar de nuevo',
+                    background: '#1a202c',
+                    color: '#e2e8f0'
+                });
+
                 submitBtn.textContent = 'Entrar';
                 submitBtn.disabled = false;
+                grecaptcha.reset(); // Reseteamos captcha para que intenten de nuevo
             }
 
         } catch (error) {
-            // ¡ERROR DE RED!
-            console.error('Error de fetch:', error);
-            messageElement.textContent = 'No se pudo conectar al servidor. Intenta más tarde.';
+            console.error('Error:', error);
+            
+            // --- ERROR DE RED ---
+            Swal.fire({
+                title: 'Error de Conexión',
+                text: 'No se pudo conectar al servidor. Intenta más tarde.',
+                icon: 'error',
+                confirmButtonText: 'Entendido',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
+
             submitBtn.textContent = 'Entrar';
             submitBtn.disabled = false;
+            grecaptcha.reset();
         }
     });
 });
