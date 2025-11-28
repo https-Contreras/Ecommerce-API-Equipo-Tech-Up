@@ -62,29 +62,47 @@ const sendEmail = async (to, subject, html, attachments = []) => {
 };
 /**
  * Envía un correo de bienvenida al usuario que se suscribe
- */
-const sendWelcomeEmail = async (toEmail) => {
+ */const sendWelcomeEmail = async (toEmail) => {
     const subject = "🎉 ¡Bienvenido a Tech-Up Elite!";
     const html = `
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
-            .footer { text-align: center; margin-top: 20px; color: #777; font-size: 12px; }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+            
+            /* HEADER CON LOGO Y LEMA */
+            .header { 
+                background-color: #1a202c; /* Fondo oscuro tech */
+                padding: 30px; 
+                text-align: center; 
+            }
+            .header img { width: 60px; height: 60px; margin-bottom: 10px; }
+            .header h1 { margin: 0; color: #00e5ff; font-size: 28px; letter-spacing: 1px; }
+            .header p { margin: 5px 0 0; color: #a0aec0; font-style: italic; font-size: 14px; }
+
+            .content { background: #ffffff; padding: 40px 30px; }
+            .welcome-title { color: #1a202c; text-align: center; margin-top: 0; }
+            
+            .button { display: inline-block; background: #00e5ff; color: #1a202c; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+            .button:hover { background: #00c4d9; }
+
+            .coupon-box { background: #f0f2f5; padding: 20px; text-align: center; border: 2px dashed #00e5ff; border-radius: 8px; margin: 20px 0; }
+            
+            .footer { background-color: #eee; padding: 20px; text-align: center; color: #666; font-size: 12px; }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
-                <h1>🚀 ¡Bienvenido a Tech-Up!</h1>
+                <img src="/Backend/public/images/logo.png" alt="Tech-Up Logo">
+                <h1>Tech-Up</h1>
+                <p>"El futuro del cómputo, ahora"</p>
             </div>
+
             <div class="content">
-                <h2>¡Gracias por unirte a la élite tecnológica!</h2>
+                <h2 class="welcome-title">¡Gracias por unirte a la élite tecnológica!</h2>
                 <p>Estamos emocionados de tenerte con nosotros. A partir de ahora recibirás:</p>
                 <ul>
                     <li>✨ Ofertas exclusivas</li>
@@ -92,18 +110,24 @@ const sendWelcomeEmail = async (toEmail) => {
                     <li>🔥 Acceso anticipado a nuevos productos</li>
                     <li>📰 Noticias sobre tecnología</li>
                 </ul>
+                
                 <p>Como agradecimiento, aquí está tu cupón de bienvenida:</p>
-                <div style="background: #fff; padding: 20px; text-align: center; border: 2px dashed #667eea; border-radius: 5px; margin: 20px 0;">
-                    <h3 style="color: #667eea; margin: 0;">WELCOME10</h3>
-                    <p style="margin: 5px 0;">10% de descuento en tu primera compra</p>
+                
+                <div class="coupon-box">
+                    <h2 style="color: #1a202c; margin: 0; letter-spacing: 2px;">WELCOME10</h2>
+                    <p style="margin: 5px 0; color: #555;">10% de descuento en tu primera compra</p>
                 </div>
+                
                 <center>
                     <a href="http://localhost:5500/index.html" class="button">Explorar Productos</a>
                 </center>
-                <p>¡Prepárate para la mejor experiencia tecnológica!</p>
+                
+                <p style="text-align: center; margin-top: 30px;">¡Prepárate para la mejor experiencia tecnológica!</p>
             </div>
+
             <div class="footer">
-                <p>Tech-Up - Proyecto académico de Programación de Sistemas WEB</p>
+                <p>&copy; 2025 Tech-Up. Todos los derechos reservados.</p>
+                <p>Proyecto académico de Programación de Sistemas WEB</p>
                 <p>Si no solicitaste esta suscripción, puedes ignorar este correo.</p>
             </div>
         </div>

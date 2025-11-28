@@ -43,32 +43,31 @@ app.get("/tech-up/test", (req, res) => {
   });
 });
 
-// 👤 Rutas de usuarios (login, register) - CON CAPTCHA
+// 👤 Rutas de usuarios CON CAPTCHA
 app.use("/tech-up/users", userRoutes);
 
-// 🔐 Rutas de admin:
+// Rutas de admin
 app.use("/tech-up/api/admin", adminRoutes);
 
-// 💳 Rutas de pagos - CON CAPTCHA
+//Rutas de pagos CON CAPTCHA
 app.use("/tech-up", paymentRoutes);
 
-// 📧 Rutas para subscripciones
+// Rutas para subscripciones
 app.use("/tech-up/subscriptions", subscriptionRoutes);
 app.use("/tech-up/promotions", promotionRoutes);
 
-// 📦 Rutas de productos (públicas)
+// Rutas de productos (públicas)
 app.use("/tech-up/api/products", productRoutes);
 
-// 🛒 NUEVO: Rutas del carrito de compras
+//Rutas del carrito
 app.use("/api/cart", cartRoutes);
 
-// 📧 Rutas de contacto - CON CAPTCHA
+// Rutas de contacto CON CAPTCHA
 app.use("/tech-up", contactRoutes);
 
-// 🖼️ Servir imágenes estáticas (sin protección CAPTCHA)
+// Servir imágenes estáticas
 app.use('/images', express.static('public/images'));
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📦 Rutas del carrito disponibles en /api/cart`);
 });

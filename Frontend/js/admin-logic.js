@@ -250,102 +250,70 @@ window.editarProducto = async (id) => {
         Swal.fire('Error', 'No se pudo cargar el producto', 'error');
     }
 };
-let salesChartInstance = null;
-let inventoryChartInstance = null;
+// Variables globales para las gráficas (para poder destruirlas y actualizarlas)
+let salesChart = null;
+let inventoryChart = null;
 
 async function cargarEstadisticas() {
-    // Verificamos si existen los elementos en el HTML
-    const canvasSales = document.querySelector('.chart-placeholder canvas') || createCanvasInPlaceholder(0);
-    const canvasInventory = document.querySelector('.chart-placeholder canvas') || createCanvasInPlaceholder(1);
-    const displayTotal = document.querySelector('.stat-number');
-
-    if (!canvasSales || !canvasInventory) return;
+    // Verificamos que existan los canvas
+    const ctxSales = document.getElementById('salesChart');
+    const ctxInv = document.getElementById('inventoryChart');
+    if (!ctxSales || !ctxInv) return;
 
     try {
         const token = localStorage.getItem('userToken');
         const response = await fetch('http://localhost:3000/tech-up/api/admin/dashboard-stats', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        
         const json = await response.json();
 
         if (json.success) {
             const { totalVentas, inventario, ventasMensuales } = json.data;
 
-            // 1. Texto Total Ventas (Busca el div con la clase .stat-number)
-            if(displayTotal) {
-                displayTotal.textContent = `$${parseFloat(totalVentas).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-            }
+            // 1. Actualizar Texto Total
+            document.getElementById('total-sales-display').textContent = 
+                `$${parseFloat(totalVentas).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 
-            // 2. Gráfica de Ventas Mensuales
-            if (salesChartInstance) salesChartInstance.destroy();
+            // 2. Gráfica de Ventas (Línea)
+            if (salesChart) salesChart.destroy(); // Limpiar si ya existe
             
-            const ctxSales = canvasSales.getContext('2d');
-            salesChartInstance = new Chart(ctxSales, {
-                type: 'line', // Línea para ver tendencia mensual
+            salesChart = new Chart(ctxSales, {
+                type: 'bar',
                 data: {
-                    labels: ventasMensuales.map(item => item.mes),
+                    labels: ventasMensuales.map(d => d.mes), // Eje X: Meses
                     datasets: [{
                         label: 'Ventas ($)',
-                        data: ventasMensuales.map(item => item.total),
-                        borderColor: '#00e5ff',
-                        backgroundColor: 'rgba(0, 229, 255, 0.1)',
-                        tension: 0.4,
-                        fill: true
+                        data: ventasMensuales.map(d => d.total), // Eje Y: Dinero
+                        borderColor: '#00e5ff9c', // Tu color neón
+                        backgroundColor: 'rgba(70, 206, 221, 1)',
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { grid: { color: '#2d3748' }, ticks: { color: '#a0aec0' } },
-                        x: { grid: { display: false }, ticks: { color: '#a0aec0' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // 3. Gráfica de Inventario
-            if (inventoryChartInstance) inventoryChartInstance.destroy();
+            // 3. Gráfica de Inventario (Dona)
+            if (inventoryChart) inventoryChart.destroy();
 
-            const ctxInv = canvasInventory.getContext('2d');
-            inventoryChartInstance = new Chart(ctxInv, {
+            inventoryChart = new Chart(ctxInv, {
                 type: 'doughnut',
                 data: {
-                    labels: inventario.map(item => item.categoria),
+                    labels: inventario.map(d => d.categoria),
                     datasets: [{
-                        data: inventario.map(item => item.total_stock),
-                        backgroundColor: ['#00e5ff', '#7000ff', '#ff005c'],
+                        data: inventario.map(d => d.total_stock),
+                        backgroundColor: ['#00e5ff', '#7000ff', '#ff005c'], // Colores Tech
                         borderWidth: 0
                     }]
                 },
-                options: {
-                    responsive: true,
+                options: { 
+                    responsive: true, 
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#a0aec0' } }
-                    }
+                    plugins: { legend: { position: 'right' } }
                 }
             });
         }
     } catch (error) {
-        console.error("Error cargando stats:", error);
+        console.error("Error cargando gráficas:", error);
     }
-}
-
-// Helper para reemplazar el "placeholder" por un canvas real
-function createCanvasInPlaceholder(index) {
-    const placeholders = document.querySelectorAll('.chart-placeholder');
-    if (!placeholders[index]) return null;
-
-    const placeholder = placeholders[index];
-    placeholder.innerHTML = ''; // Borrar icono y texto
-    placeholder.style.border = 'none'; // Quitar borde punteado
-    
-    const canvas = document.createElement('canvas');
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    placeholder.appendChild(canvas);
-    
-    return canvas;
 }

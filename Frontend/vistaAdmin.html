@@ -11,6 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/admin-logic.js"></script>
     <script src="js/loadComponents.js" defer></script>
+    <script src="/Frontend/js/accesibilidad.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
 </head>
 <body>
@@ -66,28 +68,29 @@
                 </table>
             </div>
         </section>
-
-        <section id="section-stats" class="admin-section">
+<section id="section-stats" class="admin-section">
             <div class="charts-grid">
+                
                 <div class="chart-card">
                     <h3>Ventas Mensuales</h3>
-                    <div class="chart-placeholder">
-                        <i class="fas fa-chart-line fa-3x"></i>
-                        <p>Gráfica en construcción</p>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="salesChart"></canvas>
                     </div>
                 </div>
+
                 <div class="chart-card">
                     <h3>Inventario por Categoría</h3>
-                    <div class="chart-placeholder">
-                        <i class="fas fa-chart-pie fa-3x"></i>
-                        <p>Gráfica en construcción</p>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="inventoryChart"></canvas>
                     </div>
                 </div>
-                <div class="chart-card">
-                    <h3>Resumen Total</h3>
-                    <div class="stat-number">$1,250,400</div>
-                    <p>Ventas Totales</p>
+
+                <div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">
+                    <h3>Ingresos Totales</h3>
+                    <div class="stat-number" id="total-sales-display">$0.00</div>
+                    <p>Ventas Históricas</p>
                 </div>
+
             </div>
         </section>
 

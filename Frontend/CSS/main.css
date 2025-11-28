@@ -45,20 +45,31 @@ body.light-mode {
 
 /* * 10. ESTILOS PÁGINA DE INICIO (HOME) (¡NUEVO!)
  *********************************************/
-
-/* --- 1. Hero Section --- */
 .hero-section {
-    background-color: var(--color-surface);
-    padding: 5rem 1.5rem;
+    position: relative;
+    padding: 6rem 1.5rem;
     text-align: center;
-    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+    margin-bottom: 3rem;
+    
+    /* Fondo con imagen y overlay oscuro */
+    background: linear-gradient(to bottom, rgba(10, 15, 24, 0.9), rgba(10, 15, 24, 0.7)), 
+                url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
+/* Título con degradado de texto */
 .hero-title {
-    font-size: 2.8rem;
-    font-weight: 700;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin-bottom: 1rem;
-    color: var(--color-text);
+    background: linear-gradient(90deg, #fff, #00e5ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
 }
 
 /* Helper para texto neón */
@@ -149,13 +160,32 @@ body.light-mode {
 }
 /* --- 4. Banner de Ofertas (CTA) --- */
 .cta-banner {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-primary); /* Borde neón */
-    box-shadow: var(--shadow-glow); /* Efecto glow */
-    border-radius: 8px;
-    padding: 3rem 1.5rem;
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(118, 75, 162, 0.1));
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.1) inset; /* Brillo interior */
+    border-radius: 16px;
+    padding: 4rem 2rem;
     margin: 4rem 0;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de brillo que pasa */
+.cta-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: skewX(-25deg);
+    animation: shine 6s infinite;
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
 }
 
 .cta-banner h3 {
@@ -201,17 +231,27 @@ body.light-mode {
 html {
     font-size: var(--font-size-base);
 }
-
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    
-    /* Aplicamos los colores base */
-    background-color: var(--color-background);
     color: var(--color-text);
     
-    /* Transición suave para el cambio de tema */
-    transition: background-color 0.3s, color 0.3s;
+    /* FONDO PRO: Degradado radial oscuro + textura de puntos */
+    background-color: #0a0f18;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 229, 255, 0.08), transparent 25%), 
+        radial-gradient(circle at 85% 30%, rgba(118, 75, 162, 0.08), transparent 25%);
+    background-attachment: fixed; /* El fondo se queda quieto al hacer scroll */
+}
+
+/* Animación de entrada suave para todo el contenido */
+main {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 h1, h2, h3 {
@@ -226,13 +266,14 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
 /* * 3. CLASES DE UTILIDAD Y DISEÑO BÁSICO
  */
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 /* * 4. ESTILOS DEL HEADER
  */
+
 .site-header {
     background-color: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
@@ -241,6 +282,34 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+.logo-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    gap: 10px;
+}
+.logo-container p {
+    color: #718096;
+    font-size: 12px;
+}
+.logo-container h1{
+    font-size: 25px;
+}
+/* Busca la imagen dentro del header */
+.site-header img {
+    /* Define un ancho máximo razonable. Ajusta los 150px a tu gusto. */
+    max-width: 150px; 
+    
+    /* ¡ESTO ES LO MÁS IMPORTANTE! Mantiene la proporción original */
+    height: 100px; 
+    
+    /* Asegura que no se aplaste si los elementos de navegación lo empujan */
+    flex-shrink: 0; 
+    
+    /* Opcional: para alinearla verticalmente si el header usa flexbox */
+    align-self: center; 
+}
 .site-header .container {
     display: flex;
     justify-content: space-between;
@@ -330,7 +399,6 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
     border-color: var(--color-primary-hover);
     box-shadow: var(--shadow-glow); /* Usamos el glow fuerte */
 }
-
 
 /* * 4.2 ESTILOS DE FILTROS 
  *********************************************/
@@ -436,34 +504,31 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
 }
 
 .product-card {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
+    /* Fondo semi-transparente (Glassmorphism) */
+    background: rgba(26, 32, 44, 0.6);
+    backdrop-filter: blur(10px); /* El efecto de borroso detrás */
+    -webkit-backdrop-filter: blur(10px);
     
-    /* Transición para el efecto "glow" */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote suave */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* * Efecto "glow" y "levantar" al pasar el mouse.
- * Este es el efecto futurista que pediste.
- */
 .product-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px) scale(1.02); /* Se levanta y crece un poco */
     border-color: var(--color-primary);
-    box-shadow: var(--shadow-glow);
+    box-shadow: 0 15px 30px rgba(0, 229, 255, 0.15); /* Resplandor neón */
 }
 
 .product-image-container img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    display: block;
-    /* Borde sutil, no tan fuerte como la tarjeta */
-    border-bottom: 1px solid var(--color-border);
+    transition: transform 0.5s ease;
 }
 
+.product-card:hover .product-image-container img {
+    transform: scale(1.1); /* Zoom a la imagen al pasar el mouse */
+}
 .product-info {
     padding: 1.5rem;
 }
@@ -910,19 +975,29 @@ h3 { color: var(--color-primary); } /* Títulos de producto también */
 
 /* El círculo para la foto de perfil (placeholder) */
 .team-photo-placeholder {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%; /* Círculo perfecto */
-    background-color: var(--color-background); /* Fondo oscuro */
-    border: 3px solid var(--color-primary); /* Borde neón */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    background-color: var(--color-background);
+    border: 3px solid var(--color-primary);
     margin: 0 auto 1.25rem auto;
     
-    /* (Puedes poner una <img /> aquí adentro después) */
+    /* ¡IMPORTANTE! Esto corta lo que se salga del círculo */
+    overflow: hidden; 
+    
+    /* Para centrar la imagen perfectamente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-/*.team-photo-placeholder img {
+/* La imagen dentro del círculo */
+.team-photo-placeholder img {
+    width: 100%;       /* Ocupa todo el ancho del círculo */
+    height: 100%;      /* Ocupa todo el alto del círculo */
+    object-fit: cover; /* Recorta la imagen para que no se deforme/aplaste */
+    display: block;    /* Quita espacios fantasma */
+}
 
-}
-*/
 .team-card h4 {
     color: var(--color-text);
     font-size: 1.25rem;

@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const statsController = require("../controllers/statsController"); 
 // Importamos el controlador de productos (que ya tiene create, update, delete)
 const productController = require("../controllers/productController");
 // Importamos el controlador de suscripciones (para las stats)
-const subscriptionController = require("../controllers/subscriptionController");
+const statsController= require("../controllers/statsController");
 
 // Importamos los middlewares de seguridad
 const { verifyToken, verifyAdmin } = require("../middleware/adminMiddleware");
+const { verify } = require("jsonwebtoken");
 
 
 // Crear Producto (POST /api/admin/products)
@@ -19,7 +19,8 @@ router.put("/products/:id", verifyToken, verifyAdmin, productController.updatePr
 // Eliminar Producto (DELETE /api/admin/products/:id)
 router.delete("/products/:id", verifyToken, verifyAdmin, productController.deleteProduct);
 
-
+//obtener estadisticas 
+router.get("/dashboard-stats", verifyToken, verifyAdmin, statsController.getDashboardStats);
 
 
 module.exports = router;

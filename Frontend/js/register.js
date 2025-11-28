@@ -16,14 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Validaciones
         if (password !== passwordConfirm) {
-            messageElement.textContent = 'Las contraseñas no coinciden.';
-            messageElement.style.color = '#ff4d4d';
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden.',
+                icon: 'error',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
             return;
         }
 
         if (password.length < 8) {
-            messageElement.textContent = 'Tu contraseña debe tener al menos 8 caracteres.';
-            messageElement.style.color = '#ff4d4d';
+            Swal.fire({
+                title: 'Contraseña Débil',
+                text: 'Tu contraseña debe tener al menos 8 caracteres.',
+                icon: 'warning',
+                background: '#1a202c',
+                color: '#e2e8f0'
+            });
             return;
         }
 
