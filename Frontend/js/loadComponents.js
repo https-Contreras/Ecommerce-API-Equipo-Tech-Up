@@ -65,7 +65,7 @@ async function checkLoginStatus() {
         } else {
             // --- TOKEN INVÁLIDO O EXPIRADO ---
             console.warn("Token expirado o inválido. Cerrando sesión.");
-            logoutAutomatico();
+        
         }
 
     } catch (error) {
