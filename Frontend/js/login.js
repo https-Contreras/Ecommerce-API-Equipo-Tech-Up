@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch('http://localhost:3000/tech-up/users/login', {
+            const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
