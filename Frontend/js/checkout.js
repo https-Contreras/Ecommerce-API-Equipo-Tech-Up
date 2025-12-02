@@ -6,7 +6,7 @@
  * Requiere: Sesión iniciada + CAPTCHA
  */
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'http://tech-up.westus2.cloudapp.azure.com:3000';
 const CART_API = `${API_BASE_URL}/api/cart`;
 
 // ============================================
@@ -317,7 +317,7 @@ async function procesarPago() {
         // console.log("Enviando orden:", orderData); // Debug
 
         // 6. ENVIAR A TU API DE PROCESAR PAGO (Tu ruta POST)
-        const response = await fetch('http://localhost:3000/tech-up/procesar-pago', {
+        const response = await fetch('http://tech-up.westus2.cloudapp.azure.com/tech-up/procesar-pago', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

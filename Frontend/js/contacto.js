@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/tech-up/contact', {
+            const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

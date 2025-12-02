@@ -37,7 +37,7 @@ async function cargarContadorCarrito() {
     }
     
     try {
-        const response = await fetch('http://localhost:3000/api/cart', {
+        const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/api/cart', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -59,7 +59,7 @@ async function cargarProductos(filtros = {}) {
     if (!productListElement) return;
 
     try {
-        const url = new URL('http://localhost:3000/tech-up/api/products');
+        const url = new URL('http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/products');
         if (filtros.categoria) url.searchParams.append('categoria', filtros.categoria);
         if (filtros.precio) url.searchParams.append('precio', filtros.precio);
         if (filtros.oferta) url.searchParams.append('oferta', filtros.oferta);
@@ -163,7 +163,7 @@ async function agregarAlCarritoDesdeProductos(productId, cantidad = 1) {
     }
     
     try {
-        const response = await fetch('http://localhost:3000/api/cart/add', {
+        const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/api/cart/add', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

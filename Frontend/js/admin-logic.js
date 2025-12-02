@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (prodId) {
                 method = 'PUT';
-                url = `http://localhost:3000/tech-up/api/admin/products/${prodId}`;
+                url = `http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/admin/products/${prodId}`;
             } else {
                 method = 'POST';
-                url = 'http://localhost:3000/tech-up/api/admin/products';
+                url = 'http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/admin/products';
             }
     
             try {
@@ -130,7 +130,7 @@ async function cargarTablaProductos(categoria = 'all') {
 
     try {
         // Construimos la URL con el filtro si es necesario
-        let url = 'http://localhost:3000/tech-up/api/products';
+        let url = 'http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/products';
         if (categoria !== 'all') {
             url += `?categoria=${categoria}`;
         }
@@ -202,7 +202,7 @@ window.eliminarProducto = async (id) => {
         try {
             const token = localStorage.getItem('userToken');
             // Ruta de Admin para borrar
-            const response = await fetch(`http://localhost:3000/tech-up/api/admin/products/${id}`, {
+            const response = await fetch(`http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/admin/products/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -223,7 +223,7 @@ window.eliminarProducto = async (id) => {
 // Editar Producto (Carga datos de ruta PÚBLICA, prepara form para PUT)
 window.editarProducto = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/tech-up/api/products/${id}`);
+        const response = await fetch(`http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/products/${id}`);
         const json = await response.json();
 
         if (json.success) {
@@ -262,7 +262,7 @@ async function cargarEstadisticas() {
 
     try {
         const token = localStorage.getItem('userToken');
-        const response = await fetch('http://localhost:3000/tech-up/api/admin/dashboard-stats', {
+        const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/api/admin/dashboard-stats', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const json = await response.json();
