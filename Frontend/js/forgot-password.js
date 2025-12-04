@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // 1. Llama a tu API de backend (tu ruta '/tech-up/users/forgot-password')
-            const response = await fetch('https://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/forgot-password', {
+            const response = await fetch('https://tech-up.westus2.cloudapp.azure.com/tech-up/users/forgot-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email })

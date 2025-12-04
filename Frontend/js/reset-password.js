@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // 3. Enviar al Backend
-            const response = await fetch('https://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/reset-password', {
+            const response = await fetch('https://tech-up.westus2.cloudapp.azure.com/tech-up/users/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

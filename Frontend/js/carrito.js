@@ -8,7 +8,7 @@
 // ============================================
 // CONFIGURACIÓN
 // ============================================
-const API_BASE_URL = 'https://tech-up.westus2.cloudapp.azure.com:3000';
+const API_BASE_URL = 'https://tech-up.westus2.cloudapp.azure.com';
 const CART_API = `${API_BASE_URL}/api/cart`;
 
 const COSTOS_ENVIO = {
