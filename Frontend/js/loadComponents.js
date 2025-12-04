@@ -42,7 +42,7 @@ async function checkLoginStatus() {
 
     try {
         // 2. Preguntamos al Backend: "¿Quién es este usuario?"
-        const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/verify', {
+        const response = await fetch('https://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/verify', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`, // Enviamos el token

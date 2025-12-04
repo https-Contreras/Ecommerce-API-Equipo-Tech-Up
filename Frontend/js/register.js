@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Enviar al backend CON el token del captcha
-            const response = await fetch('http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/register', {
+            const response = await fetch('https://tech-up.westus2.cloudapp.azure.com:3000/tech-up/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -24,7 +24,7 @@ function initSubscribeForm() {
 
       try {
         const response = await fetch(
-          "http://tech-up.westus2.cloudapp.azure.com:3000/tech-up/subscriptions",
+          "https://tech-up.westus2.cloudapp.azure.com:3000/tech-up/subscriptions",
           {
             method: "POST",
             headers: {
