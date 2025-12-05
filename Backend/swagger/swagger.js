@@ -21,6 +21,9 @@ const swaggerOptions = {
     },
     servers: [
       {
+        url: "https://tech-up.westus2.cloudapp.azure.com", // <--- AGREGA ESTO
+        description: "Servidor de Producción (Azure HTTPS)",
+        
         url: "http://localhost:3000",
         description: "Servidor de desarrollo",
       },
